@@ -1,0 +1,6 @@
+PROJECT(CGAL_Setup)
+find_package(CGAL)
+add_library( CGAL_Setup INTERFACE)
+TARGET_SOURCES( CGAL_Setup INTERFACE CGAL_Setup.h)
+target_link_libraries(CGAL_Setup INTERFACE CGAL::CGAL)
+#target_include_directories ( CGAL_Setup INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
