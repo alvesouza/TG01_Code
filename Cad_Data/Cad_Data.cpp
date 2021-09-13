@@ -45,3 +45,12 @@ Cad_Data_XY Cad_Data::projection_XY() {
 
     return new_xy;
 }
+
+std::vector<Cad_Data_XY> Project_Cad_Data_Vector( std::vector<Cad_Data> vector){
+    std::vector<Cad_Data_XY> projection_cad;
+
+    for (std::size_t i = 0, size = vector.size(); i < size; i++)
+        projection_cad.push_back(vector[i].projection_XY());
+
+    return projection_cad;
+}

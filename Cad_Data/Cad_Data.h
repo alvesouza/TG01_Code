@@ -34,5 +34,6 @@ public:
 
 };
 
+std::vector<Cad_Data_XY> Project_Cad_Data_Vector( std::vector<Cad_Data> vector);
 
 #endif //TG01_CODE_CAD_DATA_H

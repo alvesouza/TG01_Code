@@ -52,3 +52,11 @@ target_link_libraries (TG01_Code INTERFACE CGAL_Setup)
 ADD_SUBDIRECTORY(Cad_Data)
 
 target_link_libraries (TG01_Code LINK_PUBLIC Cad_Data)
+ADD_SUBDIRECTORY(CGAL_helpers)
+target_link_libraries (TG01_Code LINK_PUBLIC CGAL_helpers)
+
+ADD_SUBDIRECTORY(Genes_helpers)
+target_link_libraries (TG01_Code LINK_PUBLIC Genes_helpers)
+
+ADD_SUBDIRECTORY(Genetic)
+target_link_libraries (TG01_Code LINK_PUBLIC Genetic)

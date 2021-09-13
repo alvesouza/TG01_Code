@@ -8,3 +8,8 @@ add_library( CGAL_helpers CGAL_helpers.h CGAL_helpers.cpp)
 #target_link_libraries(Cad_Data INTERFACE ../CGAL_Setup)
 target_include_directories ( CGAL_helpers PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories( CGAL_helpers PUBLIC "${CGAL_Setup_SOURCE_DIR}")
+
+PROJECT(Test_CGAL_helpers)
+
+add_executable(Test_CGAL_helpers teste.cpp)
+target_link_libraries(Test_CGAL_helpers LINK_PUBLIC CGAL_helpers)

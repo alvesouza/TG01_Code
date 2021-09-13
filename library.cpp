@@ -48,8 +48,8 @@ boost::python::list Point_2VectorPythonList(std::vector<Point_2> vector){
     return list;
 }
 
-boost::python::list QuaterniontoPythonList(std::vector<float> vector){
-    return toPythonList<float>(vector);
+boost::python::list QuaterniontoPythonList(std::vector<kernel_type> vector){
+    return toPythonList<kernel_type>(vector);
 }
 boost::python::list teste(){
     std::vector<int> a = {1,2,3};
@@ -128,14 +128,23 @@ Cad_Data Create_Cad(){
 void Module_Add_CGAL_Point_3(){
     python::class_<Point_3>("Point_3"
     );
-            //.def("x", &Point_3::x)
-            //.def("y", &Point_3::y)
-            //.def("z", &Point_3::z);
-            //.def("__getitem__", &Point_3::operator[]);
+    //.def("x", &Point_3::x)
+    //.def("y", &Point_3::y)
+    //.def("z", &Point_3::z);
+    //.def("__getitem__", &Point_3::operator[]);
+}
+void Module_Add_CGAL_Point_2(){
+    python::class_<Point_2>("Point_2"
+    );
+    //.def("x", &Point_3::x)
+    //.def("y", &Point_3::y)
+    //.def("z", &Point_3::z);
+    //.def("__getitem__", &Point_3::operator[]);
 }
 
 void Module_Add_CGAL(){
     Module_Add_CGAL_Point_3();
+    Module_Add_CGAL_Point_2();
 }
 
 void Module_Add_Cad_Data(){
@@ -168,6 +177,7 @@ void Module_Add_Vectors(){
     Module_Add_Vector_Template<Cad_Data>("Cad_DataVec");
     Module_Add_Vector_Template<Cad_Data_XY>("Cad_Data_XYVec");
     Module_Add_Vector_Template<Point_3>("Point3Vec");
+    Module_Add_Vector_Template<Point_2>("Point2Vec");
     Module_Add_Vector_Template<bool>("BoolVec");
     Module_Add_Vector_Template<float>("FloatVec");
     Module_Add_Vector_Template<kernel_type>("Kernel_TypeVec");
@@ -182,6 +192,13 @@ void Module_Add_List_Converter(){
     def("QuaterniontoPythonList", QuaterniontoPythonList, args("vector"));
 }
 
+void Add_Cad_Data(){
+    Module_Add_Cad_Data();
+    Module_Add_Cad_Data_XY();
+    using namespace boost::python;
+    def("Project_Cad_Data_Vector", Project_Cad_Data_Vector, args("vector"));
+}
+
 BOOST_PYTHON_MODULE(TG01_Code)
 {
     using namespace boost::python;
@@ -189,11 +206,10 @@ BOOST_PYTHON_MODULE(TG01_Code)
     def("teste", teste);
     def("teste2", teste2, args("lista"));
     def("teste3", teste3);
-    Module_Add_Cad_Data();
+    Add_Cad_Data();
     Module_Add_CGAL();
     Module_Add_Vectors();
     Module_Add_List_Converter();
-    Module_Add_Cad_Data_XY();
     def("Create_Cad", Create_Cad);
     def("get_Cad_Data", get_Cad_Data, args("vertexes"), args("positions"), args("quaternions"));
 

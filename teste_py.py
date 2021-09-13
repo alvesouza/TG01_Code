@@ -11,7 +11,6 @@ if __name__ == '__main__':
     )
 
     for cad in Cads:
-        print("oi")
         #cad.printa()
         #TG01_Code.Point_3VectorPythonList(cad.vertexes)
         print("Vertexes = {0}".format(TG01_Code.Point_3VectorPythonList(cad.vertexes)))

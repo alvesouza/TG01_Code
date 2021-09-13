@@ -3,6 +3,12 @@ import sys
 sys.path.append(TG01_CodePATH)
 import TG01_Code
 
+def makeRotatingPlacement(axis_origin, axis_dir, angle):
+    #import FreeCAD as App
+    OZ = App.Vector(0,0,1)
+    local_cs = App.Placement(axis_origin, App.Rotation(OZ, axis_dir))
+    return local_cs.multiply(   App.Placement( App.Vector(), App.Rotation(angle,0,0) ).multiply( local_cs.inverse() )   )
+
 def convert_vertexes_to_list( vertexes ):
     vertexes_list = []
 
@@ -50,11 +56,13 @@ if __name__ == '__main__':
                 p = obj.Placement
                 q = p.Rotation
                 print("Placement = {0}\n Rotation = {1}\n".format(p.Base[2], q))'''
+                spin = makeRotatingPlacement(App.Vector(b[0], b[1], b[2]),App.Vector(0,0,1), 45)
+                #obj.Placement = spin.multiply( obj.Placement )
                 vertexes_obj.append(convert_vertexes_to_list(s.Vertexes))
                 positions_obj.append([b[0], b[1], b[2]])
-                r = r.Q
-                quaternions_obj.append([r[0], r[1], r[2], r[3]])
-
+                #r = r.Q
+                quaternions_obj.append([r[0], r[1], r[2]])
+                #quaternions_obj.append([r[0], r[1], r[2], r[3]])
         '''if 'Shape' in dir(obj):
             if str(type(obj)) == "<class 'PartDesign.Body'>":
                 #c = obj.Content
@@ -75,7 +83,12 @@ if __name__ == '__main__':
     print("positions_obj = {0}".format(positions_obj))    
     print("quaternions_obj = {0}".format(quaternions_obj))    
     Cads = TG01_Code.get_Cad_Data(vertexes_obj, positions_obj, quaternions_obj)
-    for cad in Cads:
+    Cads_XY = TG01_Code.Project_Cad_Data_Vector(Cads)
+    for cad in Cads_XY:
+        print("Vertexes = {0}".format(TG01_Code.Point_2VectorPythonList(cad.vertexes)))
+        print("Position = {0}".format(TG01_Code.Point_2toPythonList(cad.position)))
+
+    """for cad in Cads:
         print("Vertexes = {0}".format(TG01_Code.Point_3VectorPythonList(cad.vertexes)))
         print("Position = {0}".format(TG01_Code.Point_3toPythonList(cad.position)))
-        print("Quaternion= {0}".format(TG01_Code.QuaterniontoPythonList(cad.quaternion)))
+        print("Quaternion= {0}".format(TG01_Code.QuaterniontoPythonList(cad.quaternion)))"""
