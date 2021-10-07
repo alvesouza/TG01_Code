@@ -50,9 +50,9 @@ namespace Genes_helpers {
     State Convert_Bits_V02( bit_parser_l1 *bits, CGAL_helpers::Rect_info *rect ){
         State value;
         uint val = bits->value;
-        value.Position[0] = (((val&16383)%10000)/10000.0f)*(rect->x_max - rect->x_min);//14bits
+        value.Position[0] = (((val&16383)%10000)/10000.0f)*(rect->x_max);//14bits
         val = val >> 14;
-        value.Position[1] = (((val&16383)%10000)/10000.0f)*(rect->y_max - rect->y_min);
+        value.Position[1] = (((val&16383)%10000)/10000.0f)*(rect->y_max);
         val = val >> 14;//now last 4 bits
         value.angle = val*12;
 

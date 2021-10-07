@@ -43,15 +43,24 @@ namespace Genetic {
     template <class T>
     void next_generation_V04(std::vector<boost::dynamic_bitset<>> &genes_population);
 
+    typedef struct geneticReturn{
+        std::vector<std::size_t> index;
+        std::vector<float> scoresFinal;
+        std::vector<float> area;
+        std::vector<float> scores;
+        std::vector<float> time;
+        std::vector<Genes_helpers::State> values;
+    } geneticReturn;
+
     template <class T>
-    std::vector<Genes_helpers::State> Genetic_Algo_V01(std::vector<Polygon_2> &p,
+    geneticReturn Genetic_Algo_V01(std::vector<Polygon_2> &p,
                                std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations);
 
     template <class T>
-    std::vector<Genes_helpers::State> Genetic_Algo_V02(std::vector<Polygon_2> &p,
+    geneticReturn Genetic_Algo_V02(std::vector<Polygon_2> &p,
                                                        std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations);
     template <class T>
-    std::vector<Genes_helpers::State> Genetic_Algo_V03(std::vector<Polygon_2> &p,
+    geneticReturn Genetic_Algo_V03(std::vector<Polygon_2> &p,
                                                        std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations);
 }
 

@@ -9,7 +9,7 @@
 namespace CGAL_helpers{
     typedef struct Rect_info Rect_info;
     struct Rect_info{
-        kernel_type x_min, x_max, y_min, y_max, area;
+        kernel_type x_max, y_max, area;
     };
     inline float angle_radian( const Vector_2 &v, const Vector_2 &u );
     void Rotate_Polygon_radian(Polygon_2 &p, const float angle);

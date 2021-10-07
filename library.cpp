@@ -34,6 +34,21 @@ boost::python::list MultipleStatesToPythonList(std::vector<Genes_helpers::State>
     return list;
 }
 
+boost::python::list GeneticRetunToPythonList(Genetic::geneticReturn genReturn ){
+    typename std::vector<Genes_helpers::State>::iterator iter;
+    boost::python::list list;
+
+    list.append(MultipleStatesToPythonList(genReturn.values));
+    list.append(toPythonList<float>(genReturn.area));
+    list.append(toPythonList<float>(genReturn.area));
+    list.append(toPythonList<float>(genReturn.scores));
+    list.append(toPythonList<float>(genReturn.scoresFinal));
+    list.append(toPythonList<float>(genReturn.time));
+    list.append(toPythonList<std::size_t>(genReturn.index));
+
+    return list;
+}
+
 void Write_PolygonVertexes( Polygon_2 polygon ){
     printf("New Object\n");
     for (std::vector<Point_2>::iterator i = polygon.begin(); i != polygon.end() ; ++i) {
@@ -63,21 +78,22 @@ boost::python::list GeneticAlgoV01( std::size_t Version, std::size_t Generations
             Population_Size, Polygons.size());
 
     std::vector<Genes_helpers::State> values;
+    Genetic::geneticReturn values_return;
     switch (Version) {
         case 1:
-            values = Genetic::Genetic_Algo_V01<T>(Polygons,genes, Generations );
+            values_return = Genetic::Genetic_Algo_V01<T>(Polygons,genes, Generations );
             break;
-        case 2:
+        /*case 2:
             values = Genetic::Genetic_Algo_V02<T>(Polygons,genes, Generations );
             break;
         case 3:
             values = Genetic::Genetic_Algo_V03<T>(Polygons,genes, Generations );
-            break;
+            break;*/
         default:
-            values = Genetic::Genetic_Algo_V01<T>(Polygons,genes, Generations );
+            values_return = Genetic::Genetic_Algo_V01<T>(Polygons,genes, Generations );
     }
 
-    return MultipleStatesToPythonList( values );
+    return GeneticRetunToPythonList( values_return );
 }
 boost::python::list GeneticAlgoV01_parser01( std::size_t Version, std::size_t Generations, std::size_t Population_Size, boost::python::list Positions,boost::python::list Vertexes ){
     return GeneticAlgoV01<Genes_helpers::bit_parser_l1>( Version, Generations, Population_Size, Positions, Vertexes );
