@@ -3,7 +3,21 @@
 //
 
 #include "Cad_Data.h"
+Polygon_2 Cad_Data_XY::Get_Convex_Hull_Polygon(){
+    std::vector<std::size_t> indices(vertexes.size()), out;
+    std::iota(indices.begin(), indices.end(),0);
 
+    CGAL::convex_hull_2(indices.begin(), indices.end(), std::back_inserter(out),
+                        Convex_hull_traits_2( CGAL::make_property_map(vertexes) ));
+
+    std::vector<Point_2> points;
+
+    for (std::size_t i : out) {
+        points.push_back(vertexes[i]);
+    }
+
+    return Polygon_2(points.begin(), points.end());
+}
 void Cad_Data::printa() {
 
     std::cout << "Position = " << this->position << std::endl;

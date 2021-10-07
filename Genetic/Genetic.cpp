@@ -3,6 +3,7 @@
 //
 
 #include "Genetic.h"
+#include <ctime>
 
 namespace Genetic {
     template <class T>
@@ -14,7 +15,7 @@ namespace Genetic {
         std::size_t group_sizes = ceil(float (population_size/number_groups));
 
         u_char prob = prob_step_groups;
-        for (std::size_t i = 0; i < population_size; ) {
+        for (std::size_t i = 1; i < population_size; ) {
             for (std::size_t j = 0; j < group_sizes && i < population_size; ++i, ++j){
                 Population[i] = boost::dynamic_bitset<>(structure_size_bits*n_states);
 
@@ -68,11 +69,16 @@ namespace Genetic {
                  std::vector<Genes_helpers::State> &values,std::vector<float> &scores, float intersection_weight){
         std::vector<Polygon_2> poly_aux;
         std::size_t size_population = genes_population.size(), best_index_score = 0;
+        std::vector<Genes_helpers::State> values_aux;
         for (std::size_t i = 0; i < size_population; ++i) {
-            Genes_helpers::convert_genes<Genes_helpers::bit_parser_l1>(genes_population[i], values);
-            poly_aux = Input_State_2_Vec_Polygon(p, values);
+            Genes_helpers::convert_genes<Genes_helpers::bit_parser_l1>(genes_population[i], values_aux);
+            if ( i == 0 ) values = values_aux;
+            poly_aux = Input_State_2_Vec_Polygon(p, values_aux);
             scores[i] = Score_V01(poly_aux, intersection_weight);
-            if (scores[best_index_score] > scores[i]) best_index_score = i;
+            if (scores[best_index_score] > scores[i]) {
+                best_index_score = i;
+                values = values_aux;
+            }
         }
 
         return best_index_score;
@@ -104,7 +110,7 @@ namespace Genetic {
             best_indexes[i] = pq.top().second;
             pq.pop();
         }
-
+        Genes_helpers::convert_genes<Genes_helpers::bit_parser_l1>(genes_population[best_indexes], values);
         return best_indexes;
     }
     typedef struct Generation_Algo_V03_struct Generation_Algo_V03_struct;
@@ -150,7 +156,7 @@ namespace Genetic {
             best_indexes[i] = pq.top().second;
             pq.pop();
         }
-
+        Genes_helpers::convert_genes<Genes_helpers::bit_parser_l1>(genes_population[best_indexes], values);
         return {best_indexes, best_rect};
     }
 
@@ -195,6 +201,7 @@ namespace Genetic {
 
     }
 
+    template <class T>
     void next_generation_V01(std::vector<boost::dynamic_bitset<>> &genes_population){
         //keeps the best result untouched
         std::size_t i = 1;
@@ -203,7 +210,7 @@ namespace Genetic {
                 Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
             }
             if ( rand()%100 < 5 ) {
-                Genes_helpers::mutation(genes_population[i], (50 * i) / size_vector + 1);
+                Genes_helpers::mutation(genes_population[i], (1000 * i) / size_vector );
             }
         }
 
@@ -212,7 +219,7 @@ namespace Genetic {
                 Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
             }
             if ( rand()%100 < 10 ) {
-                Genes_helpers::mutation(genes_population[i], (50 * i) / size_vector + 1);
+                Genes_helpers::mutation(genes_population[i], (2000 * i) / size_vector);
             }
         }
 
@@ -221,7 +228,7 @@ namespace Genetic {
                 Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
             }
             if ( rand()%100 < 50 ) {
-                Genes_helpers::mutation(genes_population[i], (50 * i) / size_vector + 1);
+                Genes_helpers::mutation(genes_population[i], (10000 * i) / size_vector);
             }
         }
 
@@ -230,10 +237,15 @@ namespace Genetic {
                 Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
             }
             if ( rand()%100 < 90 ) {
-                Genes_helpers::mutation(genes_population[i], (50 * i) / size_vector + 1);
+                Genes_helpers::mutation(genes_population[i], (50000 * i) / size_vector);
             }
         }
     }
+
+    template void next_generation_V01<Genes_helpers::bit_parser_l1>(std::vector<boost::dynamic_bitset<>> &genes_population);
+    template void next_generation_V01<Genes_helpers::bit_parser_l3>(std::vector<boost::dynamic_bitset<>> &genes_population);
+
+    template <class T>
     void next_generation_V02(std::vector<boost::dynamic_bitset<>> &genes_population){
         //keeps the best result untouched
         std::size_t i = 0.2*genes_population.size();
@@ -243,7 +255,7 @@ namespace Genetic {
                 Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
             }
             if ( rand()%100 < 100 ) {
-                Genes_helpers::mutation(genes_population[i], 4);
+                Genes_helpers::mutation(genes_population[i], 400);
             }
         }
 
@@ -252,7 +264,7 @@ namespace Genetic {
                 Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
             }
             if ( rand()%100 < 90 ) {
-                Genes_helpers::mutation(genes_population[i], 10);
+                Genes_helpers::mutation(genes_population[i], 1000);
             }
         }
 
@@ -261,33 +273,149 @@ namespace Genetic {
                 Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
             }
             if ( rand()%100 < 100 ) {
-                Genes_helpers::mutation(genes_population[i], 30);
+                Genes_helpers::mutation(genes_population[i], 3000);
             }
         }
     }
 
+    template void next_generation_V02<Genes_helpers::bit_parser_l1>(std::vector<boost::dynamic_bitset<>> &genes_population);
+    template void next_generation_V02<Genes_helpers::bit_parser_l3>(std::vector<boost::dynamic_bitset<>> &genes_population);
+
+    template <class T>
+    void next_generation_V03(std::vector<boost::dynamic_bitset<>> &genes_population){
+        //keeps the best result untouched
+        std::size_t i = 1;
+        for (std::size_t size_vector = 0.2*genes_population.size(); i < size_vector; ++i) {
+            if ( rand()%100 < 5 && i + 1 < size_vector ) {
+                Genes_helpers::crossV02<T>(genes_population[i], genes_population[i + 1]);
+            }
+            if ( rand()%100 < 5 ) {
+                Genes_helpers::mutationV02<T>(genes_population[i], (1000 * i) / size_vector );
+            }
+        }
+
+        for (std::size_t size_vector = 0.5*genes_population.size(); i < size_vector; ++i) {
+            if ( rand()%100 < 10 && i + 1 < size_vector ) {
+                Genes_helpers::crossV02<T>(genes_population[i], genes_population[i + 1]);
+            }
+            if ( rand()%100 < 10 ) {
+                Genes_helpers::mutationV02<T>(genes_population[i], (2000 * i) / size_vector);
+            }
+        }
+
+        for (std::size_t size_vector = 0.75*genes_population.size(); i < size_vector; ++i) {
+            if ( rand()%100 < 40 && i + 1 < size_vector ) {
+                Genes_helpers::crossV02<T>(genes_population[i], genes_population[i + 1]);
+            }
+            if ( rand()%100 < 50 ) {
+                Genes_helpers::mutationV02<T>(genes_population[i], (10000 * i) / size_vector);
+            }
+        }
+
+        for (std::size_t size_vector = genes_population.size(); i < size_vector; ++i) {
+            if ( rand()%100 < 80 && i + 1 < size_vector ) {
+                Genes_helpers::crossV02<T>(genes_population[i], genes_population[i + 1]);
+            }
+            if ( rand()%100 < 90 ) {
+                Genes_helpers::mutationV02<T>(genes_population[i], (50000 * i) / size_vector);
+            }
+        }
+    }
+
+    template void next_generation_V03<Genes_helpers::bit_parser_l1>(std::vector<boost::dynamic_bitset<>> &genes_population);
+    template void next_generation_V03<Genes_helpers::bit_parser_l3>(std::vector<boost::dynamic_bitset<>> &genes_population);
+
+
+    template <class T>
+    void next_generation_V04(std::vector<boost::dynamic_bitset<>> &genes_population){
+        //keeps the best result untouched
+        std::size_t i = 0.2*genes_population.size();
+
+        for (std::size_t size_vector = 0.5*genes_population.size(); i < size_vector; ++i) {
+            if ( rand()%100 < 0 && i + 1 < size_vector ) {
+                Genes_helpers::crossV02<T>(genes_population[i], genes_population[i + 1]);
+            }
+            if ( rand()%100 < 100 ) {
+                Genes_helpers::mutationV02<T>(genes_population[i], 400);
+            }
+        }
+
+        for (std::size_t size_vector = 0.75*genes_population.size(); i < size_vector; ++i) {
+            if ( rand()%100 < 75 && i + 1 < size_vector ) {
+                Genes_helpers::crossV02<T>(genes_population[i], genes_population[i + 1]);
+            }
+            if ( rand()%100 < 90 ) {
+                Genes_helpers::mutationV02<T>(genes_population[i], 1000);
+            }
+        }
+
+        for (std::size_t size_vector = genes_population.size(); i < size_vector; ++i) {
+            if ( rand()%100 < 30 && i + 1 < size_vector ) {
+                Genes_helpers::crossV02<T>(genes_population[i], genes_population[i + 1]);
+            }
+            if ( rand()%100 < 100 ) {
+                Genes_helpers::mutationV02<T>(genes_population[i], 3000);
+            }
+        }
+    }
+
+    template void next_generation_V04<Genes_helpers::bit_parser_l1>(std::vector<boost::dynamic_bitset<>> &genes_population);
+    template void next_generation_V04<Genes_helpers::bit_parser_l3>(std::vector<boost::dynamic_bitset<>> &genes_population);
+
+    typedef struct geneticReturn{
+        std::vector<std::size_t> index;
+        std::vector<float> scoresFinal;
+        std::vector<float> area;
+        std::vector<float> scores;
+        std::vector<float> time;
+        std::vector<Genes_helpers::State> values;
+    } geneticReturn;
+    template<class T>
     std::vector<Genes_helpers::State> Genetic_Algo_V01(std::vector<Polygon_2> &p,
-                                                       std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations = 1000){
+                                                       std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations){
+
+        geneticReturn results;
         std::size_t size_population = genes_population.size();
         std::vector<Genes_helpers::State> values;
         //std::vector<std::size_t> selected_indexes(size_population);
         std::vector<float> scores(size_population);
         std::size_t best_index;
+        float area_aux;
+        float intersection_weight_max = std::numeric_limits<float>::max();
+        std::clock_t start;
+
         for (std::size_t i = 0; i < generations; ++i) {
             if ( i < 0.75*generations )
-                best_index = Generation_Algo_V01(p, genes_population, values, scores, 100+(i/10)*500.0f);
+                best_index = Generation_Algo_V01(p, genes_population, values, scores, 10 + ((i + 1) / generations) *
+                                                                                           500000.0 );
             else
-                best_index = Generation_Algo_V01(p, genes_population, values, scores, std::numeric_limits<float>::max());
+                best_index = Generation_Algo_V01(p, genes_population, values, scores, intersection_weight_max);
+            if( i % 10 == 0 || i == (generations - 1) ) {
+                results.index.push_back(i);
+                results.scores.push_back(scores[best_index]);
+                area_aux = CGAL_helpers::Min_Rect_XY_Area(p);
+                results.area.push_back(area_aux);
+                results.scoresFinal.push_back( area_aux +
+                    intersection_weight_max*CGAL_helpers::All_Intersection_Area(p) );
+
+                results.time.push_back((std::clock() - start) / (float)(CLOCKS_PER_SEC / 1000));
+            }
             genes_population = selection_V01(genes_population, scores, best_index);
-            next_generation_V01(genes_population);
+            next_generation_V01<T>(genes_population);
         }
 
         Genes_helpers::convert_genes<Genes_helpers::bit_parser_l1>(genes_population[best_index], values);
         return values;
     }
 
+    template std::vector<Genes_helpers::State> Genetic_Algo_V01<Genes_helpers::bit_parser_l1>(std::vector<Polygon_2> &p,
+                                                                                              std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations = 1000);
+    template std::vector<Genes_helpers::State> Genetic_Algo_V01<Genes_helpers::bit_parser_l3>(std::vector<Polygon_2> &p,
+                                                                                              std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations = 1000);
+
+    template<class T>
     std::vector<Genes_helpers::State> Genetic_Algo_V02(std::vector<Polygon_2> &p,
-                                                       std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations = 1000){
+                                                       std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations){
         std::size_t size_population = genes_population.size();
         std::vector<Genes_helpers::State> values;
         //std::vector<std::size_t> selected_indexes(size_population);
@@ -295,19 +423,25 @@ namespace Genetic {
         std::vector<std::size_t> best_indexes;
         for (std::size_t i = 0; i < generations; ++i) {
             if ( i < 0.75*generations )
-                best_indexes = Generation_Algo_V02(p, genes_population, values, scores, 5000+(i/10)*100.0f);
+                best_indexes = Generation_Algo_V02(p, genes_population, values, scores, 10+((i+1)/generations)*(std::numeric_limits<float>::max()/4));
             else
                 best_indexes = Generation_Algo_V02(p, genes_population, values, scores, std::numeric_limits<float>::max());
             genes_population = selection_V02(genes_population, scores, best_indexes);
-            next_generation_V02(genes_population);
+            next_generation_V02<T>(genes_population);
         }
         std::cout << "Best Score = " << scores[best_indexes[0]] << std::endl;
         Genes_helpers::convert_genes<Genes_helpers::bit_parser_l1>(genes_population[best_indexes[0]], values);
         return values;
     }
 
+    template std::vector<Genes_helpers::State> Genetic_Algo_V02<Genes_helpers::bit_parser_l1>(std::vector<Polygon_2> &p,
+                                                                                              std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations = 1000);
+    template std::vector<Genes_helpers::State> Genetic_Algo_V02<Genes_helpers::bit_parser_l3>(std::vector<Polygon_2> &p,
+                                                                                              std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations = 1000);
+
+    template<class T>
     std::vector<Genes_helpers::State> Genetic_Algo_V03(std::vector<Polygon_2> &p,
-                                                       std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations = 1000){
+                                                       std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations){
         std::size_t size_population = genes_population.size();
         std::vector<Genes_helpers::State> values;
         //std::vector<std::size_t> selected_indexes(size_population);
@@ -321,13 +455,13 @@ namespace Genetic {
         Generation_Algo_V03_struct info;
         for (std::size_t i = 0; i < generations; ++i) {
             if ( i < 0.75*generations )
-                info = Generation_Algo_V03(p, genes_population, values, scores, 5000+(i/10)*100.0f, best_rect, best_score, true);
+                info = Generation_Algo_V03(p, genes_population, values, scores, 10+((i+1)/generations)*(std::numeric_limits<float>::max()/4), best_rect, best_score, true);
             else
                 info = Generation_Algo_V03(p, genes_population, values, scores, std::numeric_limits<float>::max(), best_rect, best_score, i < 0.9*generations);
 
             best_rect = info.rect;
             genes_population = selection_V02(genes_population, scores, info.best_indexes);
-            next_generation_V02(genes_population);
+            next_generation_V02<T>(genes_population);
             best_score = scores[info.best_indexes[0]];
         }
         std::cout << "Best Score = " << scores[info.best_indexes[0]] << std::endl;
@@ -339,4 +473,9 @@ namespace Genetic {
         Genes_helpers::convert_genes_V02<Genes_helpers::bit_parser_l1>(genes_population[info.best_indexes[0]], values, &best_rect);
         return values;
     }
+
+    template std::vector<Genes_helpers::State> Genetic_Algo_V03<Genes_helpers::bit_parser_l1>(std::vector<Polygon_2> &p,
+                                                                                              std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations = 1000);
+    template std::vector<Genes_helpers::State> Genetic_Algo_V03<Genes_helpers::bit_parser_l3>(std::vector<Polygon_2> &p,
+                                                                                              std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations = 1000);
 }

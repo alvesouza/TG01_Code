@@ -30,7 +30,7 @@ if __name__ == '__main__':
         #l = obj.Label
         #p = obj.Placement
         #q = p.Rotation
-        '''methodList = []
+        methodList = []
         try:
             print("obj attr = {0}".format(dir(obj)))
             print("Shape attr = {0}".format(dir(obj.Shape)))
@@ -44,7 +44,7 @@ if __name__ == '__main__':
                     print("{0} has method {1}".format(str(method_name)))
         except:
             print('{0} doesnt has it \\n'.format(type(obj)))
-        print('\n////////////////////////////////////////\nlabel is {0}'.format(q))'''
+        #print('\n////////////////////////////////////////\nlabel is {0}'.format(q))
         if 'Shape' in dir(obj):
             if str(type(obj)) == "<class 'PartDesign.Body'>":
                 s = obj.Shape
@@ -57,11 +57,11 @@ if __name__ == '__main__':
                 q = p.Rotation
                 print("Placement = {0}\n Rotation = {1}\n".format(p.Base[2], q))'''
                 spin = makeRotatingPlacement(App.Vector(b[0], b[1], b[2]),App.Vector(0,0,1), 45)
-                #obj.Placement = spin.multiply( obj.Placement )
+                obj.Placement = spin.multiply( obj.Placement )
                 vertexes_obj.append(convert_vertexes_to_list(s.Vertexes))
                 positions_obj.append([b[0], b[1], b[2]])
-                #r = r.Q
-                quaternions_obj.append([r[0], r[1], r[2]])
+                r = r.Q
+                quaternions_obj.append([r[0], r[1], r[2], r[3]])
                 #quaternions_obj.append([r[0], r[1], r[2], r[3]])
         '''if 'Shape' in dir(obj):
             if str(type(obj)) == "<class 'PartDesign.Body'>":

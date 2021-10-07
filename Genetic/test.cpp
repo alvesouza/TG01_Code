@@ -83,7 +83,7 @@ void Test_Square_Genetics_V01(){
             1000, polygons.size());
 
     std::cout << "flag02\n";
-    std::vector<Genes_helpers::State> values = Genetic::Genetic_Algo_V01(polygons,genes, 10000);
+    std::vector<Genes_helpers::State> values = Genetic::Genetic_Algo_V01<Genes_helpers::bit_parser_l1>(polygons,genes, 10000);
 
     std::cout << "flag03\n";
     std::vector<Polygon_2> polygons_end = Genetic::Input_State_2_Vec_Polygon(polygons, values);
@@ -124,7 +124,7 @@ void Test_Square_Genetics_V02(){
             1000, polygons.size());
 
     std::cout << "flag02\n";
-    std::vector<Genes_helpers::State> values = Genetic::Genetic_Algo_V02(polygons,genes, 1000000);
+    std::vector<Genes_helpers::State> values = Genetic::Genetic_Algo_V02<Genes_helpers::bit_parser_l1>(polygons,genes, 1000000);
 
     std::cout << "flag03\n";
     std::vector<Polygon_2> polygons_end = Genetic::Input_State_2_Vec_Polygon(polygons, values);
@@ -167,7 +167,7 @@ void Test_Square_Genetics_V03(){
             1000, polygons.size());
 
     std::cout << "flag02\n";
-    std::vector<Genes_helpers::State> values = Genetic::Genetic_Algo_V02(polygons,genes, 10000);
+    std::vector<Genes_helpers::State> values = Genetic::Genetic_Algo_V02<Genes_helpers::bit_parser_l1>(polygons,genes, 10000);
 
     std::cout << "flag03\n";
     std::vector<Polygon_2> polygons_end = Genetic::Input_State_2_Vec_Polygon(polygons, values);
@@ -224,7 +224,7 @@ void Test_Genetic_V04(){
             1000, polygons.size());
 
     std::cout << "flag02\n";
-    std::vector<Genes_helpers::State> values = Genetic::Genetic_Algo_V03(polygons,genes, 2000);
+    std::vector<Genes_helpers::State> values = Genetic::Genetic_Algo_V03<Genes_helpers::bit_parser_l1>(polygons,genes, 2000);
 
     std::cout << "flag03\n";
     std::vector<Polygon_2> polygons_end = Genetic::Input_State_2_Vec_Polygon(polygons, values);
@@ -255,6 +255,7 @@ void Test_Intersection(){
 
 int main(){
     //Test_Create_Population();
+    /*
     int a;
     std::cout << "0 eh sair\n";
     std::cout << "1 eh Test_Create_Population\n";
@@ -290,5 +291,11 @@ int main(){
         std::cout << "5 eh Test_Genetic_V04\n";
         std::cin >> a;
     }
+    */
+    float angle = 3.14*45/180.0;
+    Point_2 p(1,0);
+    Transformation rotate(CGAL::ROTATION, sin(angle), cos(angle));
+    p = rotate( p );
+    printf( "( %f, %f )", p[0], p[1] );
     return 0;
 }

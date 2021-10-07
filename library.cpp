@@ -15,6 +15,73 @@ boost::python::list toPythonList(std::vector<T> vector) {
     return list;
 }
 
+boost::python::list StateToPythonList( Genes_helpers::State Value ){
+    boost::python::list list, aux;
+    aux.append(Value.Position[0]);
+    aux.append(Value.Position[1]);
+    list.append(aux);
+    list.append(Value.angle);
+
+    return list;
+}
+
+boost::python::list MultipleStatesToPythonList(std::vector<Genes_helpers::State> Values ){
+    typename std::vector<Genes_helpers::State>::iterator iter;
+    boost::python::list list;
+    for (iter = Values.begin(); iter != Values.end(); ++iter) {
+        list.append( StateToPythonList( *iter ) );
+    }
+    return list;
+}
+
+void Write_PolygonVertexes( Polygon_2 polygon ){
+    printf("New Object\n");
+    for (std::vector<Point_2>::iterator i = polygon.begin(); i != polygon.end() ; ++i) {
+        printf( "( %.2f, %.2f, %.2f )\n",  (*i)[0],(*i)[1],(*i)[2]);
+    }
+    printf("End Object\n");
+}
+
+std::vector<Polygon_2> CreatePolygon_2FromCadData( boost::python::list Positions,boost::python::list Vertexes ){
+    std::vector<Cad_Data> Cad_Datas = get_Cad_Data( Vertexes, Positions );
+    std::vector<Cad_Data_XY> Cad_XY_Datas;
+    std::vector<Polygon_2> Polygons;
+    for (ssize_t i = 0, size = Cad_Datas.size(); i < size; ++i) {
+        Cad_XY_Datas.push_back(Cad_Datas[i].projection_XY());
+        Polygons.push_back(Cad_XY_Datas[i].Get_Convex_Hull_Polygon() );
+        Write_PolygonVertexes( Polygons[i] );
+    }//Cad_Datas[0].projection_XY()
+
+    return Polygons;
+}
+
+template <class T>
+boost::python::list GeneticAlgoV01( std::size_t Version, std::size_t Generations, std::size_t Population_Size, boost::python::list Positions,boost::python::list Vertexes ){
+    std::vector<Polygon_2> Polygons = CreatePolygon_2FromCadData( Positions, Vertexes );
+
+    std::vector<boost::dynamic_bitset<>> genes = Genetic::Create_Genetic_Population_V01<T>(
+            Population_Size, Polygons.size());
+
+    std::vector<Genes_helpers::State> values;
+    switch (Version) {
+        case 1:
+            values = Genetic::Genetic_Algo_V01<T>(Polygons,genes, Generations );
+            break;
+        case 2:
+            values = Genetic::Genetic_Algo_V02<T>(Polygons,genes, Generations );
+            break;
+        case 3:
+            values = Genetic::Genetic_Algo_V03<T>(Polygons,genes, Generations );
+            break;
+        default:
+            values = Genetic::Genetic_Algo_V01<T>(Polygons,genes, Generations );
+    }
+
+    return MultipleStatesToPythonList( values );
+}
+boost::python::list GeneticAlgoV01_parser01( std::size_t Version, std::size_t Generations, std::size_t Population_Size, boost::python::list Positions,boost::python::list Vertexes ){
+    return GeneticAlgoV01<Genes_helpers::bit_parser_l1>( Version, Generations, Population_Size, Positions, Vertexes );
+}
 boost::python::list Point_3toPythonList(Point_3 point){
     boost::python::list list;
     list.append(point[0]);
@@ -73,28 +140,28 @@ void teste3(){
     n.printa();
 }
 using namespace boost;
-std::vector<Cad_Data> get_Cad_Data( python::list vertexes, python::list positions, python::list quaternion){
+std::vector<Cad_Data> get_Cad_Data( python::list vertexes, python::list positions ){//, python::list quaternion){
     Cad_Data cad_new;
     std::vector<Cad_Data> vec_data;
 
     ssize_t size_list = len(vertexes);
     ssize_t i = 0;
-    python::list pos, vertex_list;
+    python::list aux, vertex_list;
     while ( i < size_list ){
         cad_new = Cad_Data();
-        pos = python::extract<python::list>(positions[i] );
+        aux = python::extract<python::list>(positions[i] );
         cad_new.position = Point_3(
-                python::extract<kernel_type>(pos[0]),
-                python::extract<kernel_type>(pos[1]),
-                python::extract<kernel_type>(pos[2])
+                python::extract<kernel_type>(aux[0]),
+                python::extract<kernel_type>(aux[1]),
+                python::extract<kernel_type>(aux[2])
         );
 
         ssize_t j = 0;
         ssize_t size_vertexes = len( vertexes[i] );
 
-        pos = python::extract<python::list>(vertexes[i] );
+        aux = python::extract<python::list>(vertexes[i] );
         while ( j < size_vertexes ){
-            vertex_list = python::extract<python::list>(pos[j] );
+            vertex_list = python::extract<python::list>(aux[j] );
             cad_new.vertexes.push_back( Point_3(
                     python::extract<kernel_type>(vertex_list[0]) - cad_new.position[0],
                     python::extract<kernel_type>(vertex_list[1]) - cad_new.position[1],
@@ -103,12 +170,13 @@ std::vector<Cad_Data> get_Cad_Data( python::list vertexes, python::list position
             j++;
         }
 
-        pos = python::extract<python::list>(quaternion[i] );
-        cad_new.quaternion[0] = python::extract<kernel_type>(pos[0]);
-        cad_new.quaternion[1] = python::extract<kernel_type>(pos[1]);
-        cad_new.quaternion[2] = python::extract<kernel_type>(pos[2]);
-        cad_new.quaternion[3] = python::extract<kernel_type>(pos[3]);
-
+        /*
+        aux = python::extract<python::list>(quaternion[i] );
+        cad_new.quaternion[0] = python::extract<kernel_type>(aux[0]);
+        cad_new.quaternion[1] = python::extract<kernel_type>(aux[1]);
+        cad_new.quaternion[2] = python::extract<kernel_type>(aux[2]);
+        cad_new.quaternion[3] = python::extract<kernel_type>(aux[3]);
+        */
         vec_data.push_back(cad_new);
         i++;
     }
@@ -199,6 +267,12 @@ void Add_Cad_Data(){
     def("Project_Cad_Data_Vector", Project_Cad_Data_Vector, args("vector"));
 }
 
+void Add_Module_Genetic_Algo(){
+    using namespace boost::python;
+    //GeneticAlgoV01( int Version, std::size_t Generations, std::size_t Population_Size, boost::python::list Positions,boost::python::list Vertexes )
+    def("GeneticAlgoV01_parser01", GeneticAlgoV01_parser01 );
+}
+
 BOOST_PYTHON_MODULE(TG01_Code)
 {
     using namespace boost::python;
@@ -210,6 +284,7 @@ BOOST_PYTHON_MODULE(TG01_Code)
     Module_Add_CGAL();
     Module_Add_Vectors();
     Module_Add_List_Converter();
+    Add_Module_Genetic_Algo();
     def("Create_Cad", Create_Cad);
     def("get_Cad_Data", get_Cad_Data, args("vertexes"), args("positions"), args("quaternions"));
 

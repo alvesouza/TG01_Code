@@ -15,6 +15,8 @@ public:
     angle_type angle;
     bool operator==(const Cad_Data_XY& other) {return false;}
     bool operator!=(const Cad_Data_XY& other) {return true;}
+
+    Polygon_2 Get_Convex_Hull_Polygon();
 };
 
 class Cad_Data {

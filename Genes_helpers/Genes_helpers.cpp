@@ -8,9 +8,23 @@ namespace Genes_helpers {
 
     void mutation(boost::dynamic_bitset<> &a, uint rate){
         for (boost::dynamic_bitset<>::size_type i = 0, size = a.size(); i < size; ++i) {
-            a[i] ^= (rand()%100 < rate);
+            a[i] ^= (rand()%100001 < rate);
         }
     }
+
+    template<class T>
+    void mutationV02(boost::dynamic_bitset<> &a, uint rate){
+        /*Mutation on range of objects*/
+        const std::size_t object_size = sizeof(T)*8;
+        boost::dynamic_bitset<>::size_type number_of_objects = a.size()/object_size;
+
+        for (boost::dynamic_bitset<>::size_type i = object_size*(rand()%number_of_objects),
+                last = i + object_size*(1+rand()%(number_of_objects - i/object_size)); i < last; ++i) {
+            a[i] ^= (rand()%100001 < rate);
+        }
+    }
+    template void mutationV02<bit_parser_l1>(boost::dynamic_bitset<> &a, uint rate);
+    template void mutationV02<bit_parser_l3>(boost::dynamic_bitset<> &a, uint rate);
 
     State Convert_Bits( bit_parser_l3 *bits ){
         State value;
@@ -56,6 +70,23 @@ namespace Genes_helpers {
             b[i] = aux;
         }
     }
+
+    template<class T>
+    void crossV02(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b){
+        const std::size_t object_size = sizeof(T)*8;
+        boost::dynamic_bitset<>::size_type number_objects = a.size()/object_size;
+        boost::dynamic_bitset<>::size_type begin = object_size*(rand()%number_objects);
+        boost::dynamic_bitset<>::size_type end = begin + object_size*(1+rand()%(number_objects - begin/object_size));
+        bool aux;
+        for (boost::dynamic_bitset<>::size_type i = begin; i < end; ++i) {
+            aux = a[i];
+            a[i] = b[i];
+            b[i] = aux;
+        }
+    }
+
+    template void crossV02<bit_parser_l1>(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b);
+    template void crossV02<bit_parser_l3>(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b);
 
     template void convert_genes<bit_parser_l1>(boost::dynamic_bitset<> &genes, std::vector<State> &Values);
     template void convert_genes<bit_parser_l3>(boost::dynamic_bitset<> &genes, std::vector<State> &Values);

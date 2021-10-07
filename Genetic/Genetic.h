@@ -31,13 +31,26 @@ namespace Genetic {
 
     std::vector<boost::dynamic_bitset<>> selection_V01(std::vector<boost::dynamic_bitset<>> &genes_population,
                                                        std::vector<float> &scores, std::size_t best);
+    template <class T>
     void next_generation_V01(std::vector<boost::dynamic_bitset<>> &genes_population);
+
+    template <class T>
+    void next_generation_V02(std::vector<boost::dynamic_bitset<>> &genes_population);
+
+    template <class T>
+    void next_generation_V03(std::vector<boost::dynamic_bitset<>> &genes_population);
+
+    template <class T>
+    void next_generation_V04(std::vector<boost::dynamic_bitset<>> &genes_population);
+
+    template <class T>
     std::vector<Genes_helpers::State> Genetic_Algo_V01(std::vector<Polygon_2> &p,
                                std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations);
 
+    template <class T>
     std::vector<Genes_helpers::State> Genetic_Algo_V02(std::vector<Polygon_2> &p,
                                                        std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations);
-
+    template <class T>
     std::vector<Genes_helpers::State> Genetic_Algo_V03(std::vector<Polygon_2> &p,
                                                        std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations);
 }

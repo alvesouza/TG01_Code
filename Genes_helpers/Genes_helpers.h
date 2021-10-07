@@ -30,6 +30,9 @@ namespace Genes_helpers {
 
     void mutation(boost::dynamic_bitset<> &a, uint rate);
 
+    template<class T>
+    void mutationV02(boost::dynamic_bitset<> &a, uint rate);
+
     State Convert_Bits( bit_parser_l3 *bits );
 
     State Convert_Bits( bit_parser_l1 *bits );
@@ -37,6 +40,10 @@ namespace Genes_helpers {
     State Convert_Bits_V02( bit_parser_l1 *bits, CGAL_helpers::Rect_info *rect );
 
     void cross(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b);
+
+    template<class T>
+    void crossV02(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b);
+
 
     template<class T>
     extern void convert_genes(boost::dynamic_bitset<> &genes, std::vector<State> &Values){

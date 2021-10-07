@@ -4,6 +4,8 @@
 #include "iostream"
 #include "Cad_Data.h"
 #include "CGAL_Setup.h"
+#include "Genes_helpers.h"
+#include "Genetic.h"
 void hello();
 
 template <class T>
@@ -17,6 +19,6 @@ boost::python::list teste();
 Cad_Data Create_Cad();
 
 using namespace boost;
-std::vector<Cad_Data> get_Cad_Data( python::list vertexes, python::list positions, python::list quaternion);
+std::vector<Cad_Data> get_Cad_Data( python::list vertexes, python::list positions );
 void teste2(python::list lista);
 #endif //TG01_CODE_LIBRARY_H
