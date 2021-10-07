@@ -58,10 +58,9 @@ namespace Genetic {
         CGAL_helpers::Rect_info rect_inf = CGAL_helpers::Min_Rect_XY_Area_V02(p);
         kernel_type intersection_areas = CGAL_helpers::All_Intersection_Area(p);
         kernel_type score;
-        if (rect_inf.y_min < 0 || rect_inf.x_min < 0)
-            score = std::numeric_limits<kernel_type>::max();
-        else
-            score = rect_inf.x_max*rect_inf.y_max;
+
+        score = rect_inf.x_max*rect_inf.y_max;
+
         return {score + intersection_areas*multiply_intersection_area, intersection_areas, rect_inf};
     }
 
