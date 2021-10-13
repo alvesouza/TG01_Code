@@ -127,7 +127,7 @@ if __name__ == '__main__':
     values = GetPositionsValues(objs)
 
     print("positions = ", values )
-    new_values = TG01_Code.GeneticAlgoV01( 2, 10000, 1000, values[0], values[1] )
-    PlaceObjects( objs, new_values)
+    new_values = TG01_Code.GeneticAlgoV01_parser01( 1, 100,10, values[0], values[1] )
+    #PlaceObjects( objs, new_values)
 
-    #print("positions = ", new_values )
+    print("positions = ", new_values )

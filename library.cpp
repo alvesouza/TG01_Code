@@ -40,7 +40,6 @@ boost::python::list GeneticRetunToPythonList(Genetic::geneticReturn genReturn ){
 
     list.append(MultipleStatesToPythonList(genReturn.values));
     list.append(toPythonList<float>(genReturn.area));
-    list.append(toPythonList<float>(genReturn.area));
     list.append(toPythonList<float>(genReturn.scores));
     list.append(toPythonList<float>(genReturn.scoresFinal));
     list.append(toPythonList<float>(genReturn.time));
@@ -76,19 +75,22 @@ boost::python::list GeneticAlgoV01( std::size_t Version, std::size_t Generations
 
     std::vector<boost::dynamic_bitset<>> genes = Genetic::Create_Genetic_Population_V01<T>(
             Population_Size, Polygons.size());
-
     std::vector<Genes_helpers::State> values;
     Genetic::geneticReturn values_return;
+
+    printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
+    printf("genes size = %ld", genes[0].size());
+    printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
     switch (Version) {
         case 1:
             values_return = Genetic::Genetic_Algo_V01<T>(Polygons,genes, Generations );
             break;
-        /*case 2:
-            values = Genetic::Genetic_Algo_V02<T>(Polygons,genes, Generations );
+        case 2:
+            values_return = Genetic::Genetic_Algo_V02<T>(Polygons,genes, Generations );
             break;
         case 3:
-            values = Genetic::Genetic_Algo_V03<T>(Polygons,genes, Generations );
-            break;*/
+            values_return = Genetic::Genetic_Algo_V03<T>(Polygons,genes, Generations );
+            break;
         default:
             values_return = Genetic::Genetic_Algo_V01<T>(Polygons,genes, Generations );
     }
@@ -296,10 +298,10 @@ BOOST_PYTHON_MODULE(TG01_Code)
     def("teste", teste);
     def("teste2", teste2, args("lista"));
     def("teste3", teste3);
-    Add_Cad_Data();
-    Module_Add_CGAL();
-    Module_Add_Vectors();
-    Module_Add_List_Converter();
+    //Add_Cad_Data();
+    //Module_Add_CGAL();
+    //Module_Add_Vectors();
+    //Module_Add_List_Converter();
     Add_Module_Genetic_Algo();
     def("Create_Cad", Create_Cad);
     def("get_Cad_Data", get_Cad_Data, args("vertexes"), args("positions"), args("quaternions"));

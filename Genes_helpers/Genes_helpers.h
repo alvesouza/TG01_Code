@@ -53,13 +53,12 @@ namespace Genes_helpers {
         T aux_parser;
         std::bitset<size_structure_bits> aux;
         State aux_transform;
+
         for ( size_t index_vector = 0, size_vector = Values.size(); index_vector < size_vector; ++index_vector) {
             for (boost::dynamic_bitset<>::size_type i = 0; i < size_structure_bits; ++i) {
                 aux[i] = genes[index_vector*size_structure + i];
             }
-
             memcpy( &aux_parser, &aux, size_structure );
-
             Values[ index_vector ] = Convert_Bits(&aux_parser);
 
         }

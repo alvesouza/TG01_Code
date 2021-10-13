@@ -141,8 +141,8 @@ namespace CGAL_helpers{
         return ( x_max - x_min )*( y_max - y_min );
     }
     kernel_type Min_Rect_XY_Area_V01( std::vector<Polygon_2> &polygons ){
-        kernel_type x_min = polygons[0][0].x(),x_max = polygons[0][0].x();
-        kernel_type y_min = polygons[0][0].y(), y_max = polygons[0][0].y();
+        kernel_type x_max = polygons[0][0].x();
+        kernel_type y_max = polygons[0][0].y();
         kernel_type x,y;
         for (std::size_t i = 0, size_vector = polygons.size(); i < size_vector; ++i) {
             for (std::size_t j = 0, size_poly = polygons[i].size(); j < size_poly; ++j){
@@ -151,19 +151,9 @@ namespace CGAL_helpers{
 
                 if ( x > x_max)
                     x_max = x;
-                else if ( x < x_min ) {
-                    x_min = x;
-                    if ( x_min < 0 )
-                        return std::numeric_limits<kernel_type>::max();
-                }
 
                 if ( y > y_max)
                     y_max = y;
-                else if ( y < y_min ) {
-                    y_min = y;
-                    if ( y_min < 0 )
-                        return std::numeric_limits<kernel_type>::max();
-                }
             }
         }
         return x_max*y_max;

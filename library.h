@@ -14,7 +14,7 @@ boost::python::list Point_3toPythonList(Point_3 point);
 boost::python::list Point_3VectorPythonList(std::vector<Point_3> vector);
 boost::python::list Point_2toPythonList(Point_2 point);
 boost::python::list Point_2VectorPythonList(std::vector<Point_2> vector);
-boost::python::list QuaterniontoPythonList(std::vector<kernel_type> vector);
+//boost::python::list QuaterniontoPythonList(std::vector<kernel_type> vector);
 boost::python::list teste();
 Cad_Data Create_Cad();
 

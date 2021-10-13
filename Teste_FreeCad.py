@@ -171,6 +171,18 @@ if __name__ == '__main__':
         ]
     ]
 
-    new_values = TG01_Code.GeneticAlgoV01( 1, 1, 100, values[0], values[1] )
+    new_values = TG01_Code.GeneticAlgoV01_parser01( 3, 10000, 10000, values[0], values[1] )
 
-    print("positions = ", new_values )
+    positions = new_values[0]
+    areas = new_values[1]
+    scores = new_values[2]
+    scores_Fianl = new_values[3]
+    times = new_values[4]
+    indexes = new_values[5]
+
+    print("\npositions = ", positions )
+    print("\nareas = ", areas )
+    print("\nscores = ", scores )
+    print("\nscoresFinal = ", scores_Fianl )
+    print("\ntimes = ", times )
+    print("\nindexes = ", indexes )

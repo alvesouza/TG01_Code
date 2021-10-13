@@ -83,10 +83,10 @@ void Test_Square_Genetics_V01(){
             1000, polygons.size());
 
     std::cout << "flag02\n";
-    std::vector<Genes_helpers::State> values = Genetic::Genetic_Algo_V01<Genes_helpers::bit_parser_l1>(polygons,genes, 10000);
+    Genetic::geneticReturn values = Genetic::Genetic_Algo_V01<Genes_helpers::bit_parser_l1>(polygons,genes, 10000);
 
     std::cout << "flag03\n";
-    std::vector<Polygon_2> polygons_end = Genetic::Input_State_2_Vec_Polygon(polygons, values);
+    std::vector<Polygon_2> polygons_end = Genetic::Input_State_2_Vec_Polygon(polygons, values.values);
     std::cout << "flag04\n";
     std::cout << "Area = " << CGAL_helpers::Min_Rect_XY_Area(polygons_end) << std::endl;
     std::cout << "Intersect = " << CGAL_helpers::All_Intersection_Area(polygons_end) << std::endl;
@@ -124,10 +124,10 @@ void Test_Square_Genetics_V02(){
             1000, polygons.size());
 
     std::cout << "flag02\n";
-    std::vector<Genes_helpers::State> values = Genetic::Genetic_Algo_V02<Genes_helpers::bit_parser_l1>(polygons,genes, 1000000);
+    Genetic::geneticReturn values = Genetic::Genetic_Algo_V02<Genes_helpers::bit_parser_l1>(polygons,genes, 1000000);
 
     std::cout << "flag03\n";
-    std::vector<Polygon_2> polygons_end = Genetic::Input_State_2_Vec_Polygon(polygons, values);
+    std::vector<Polygon_2> polygons_end = Genetic::Input_State_2_Vec_Polygon(polygons, values.values);
     std::cout << "flag04\n";
     std::cout << "Area = " << CGAL_helpers::Min_Rect_XY_Area(polygons_end) << std::endl;
     std::cout << "Intersect = " << CGAL_helpers::All_Intersection_Area(polygons_end) << std::endl;
@@ -167,10 +167,10 @@ void Test_Square_Genetics_V03(){
             1000, polygons.size());
 
     std::cout << "flag02\n";
-    std::vector<Genes_helpers::State> values = Genetic::Genetic_Algo_V02<Genes_helpers::bit_parser_l1>(polygons,genes, 10000);
+    Genetic::geneticReturn values = Genetic::Genetic_Algo_V02<Genes_helpers::bit_parser_l1>(polygons,genes, 10000);
 
     std::cout << "flag03\n";
-    std::vector<Polygon_2> polygons_end = Genetic::Input_State_2_Vec_Polygon(polygons, values);
+    std::vector<Polygon_2> polygons_end = Genetic::Input_State_2_Vec_Polygon(polygons, values.values);
     std::cout << "flag04\n";
     std::cout << "Area = " << CGAL_helpers::Min_Rect_XY_Area(polygons_end) << std::endl;
     std::cout << "Intersect = " << CGAL_helpers::All_Intersection_Area(polygons_end) << std::endl;
@@ -224,10 +224,10 @@ void Test_Genetic_V04(){
             1000, polygons.size());
 
     std::cout << "flag02\n";
-    std::vector<Genes_helpers::State> values = Genetic::Genetic_Algo_V03<Genes_helpers::bit_parser_l1>(polygons,genes, 2000);
+    Genetic::geneticReturn values = Genetic::Genetic_Algo_V03<Genes_helpers::bit_parser_l1>(polygons,genes, 2000);
 
     std::cout << "flag03\n";
-    std::vector<Polygon_2> polygons_end = Genetic::Input_State_2_Vec_Polygon(polygons, values);
+    std::vector<Polygon_2> polygons_end = Genetic::Input_State_2_Vec_Polygon(polygons, values.values);
     std::cout << "flag04\n";
     std::cout << "Area = " << CGAL_helpers::Min_Rect_XY_Area(polygons_end) << std::endl;
     std::cout << "Intersect = " << CGAL_helpers::All_Intersection_Area(polygons_end) << std::endl;
