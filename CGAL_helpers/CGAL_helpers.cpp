@@ -46,19 +46,9 @@ namespace CGAL_helpers{
         }
     }
 
-    bool check_intesection( Polygon_2 &p1, Polygon_2 &p2 ){
-        bool intersect = false;
+    inline bool check_intesection_seg( Polygon_2 &p1, Polygon_2 &p2 ){
         Segment_2 seg01, seg02;
-        switch (CGAL::bounded_side_2(p1.begin(), p1.end(), p2[0])) {
-            case CGAL::ON_BOUNDED_SIDE:
-                intersect = true;
-        }
-
-        if (!intersect)
-            switch (CGAL::bounded_side_2(p2.begin(), p2.end(), p1[0])) {
-                case CGAL::ON_BOUNDED_SIDE:
-                    intersect = true;
-            }
+        bool intersect = false;
         for (std::size_t i = 0, size_01 = p1.size(); i < size_01 && !intersect; i++){
             if ( i +1 < size_01 )
                 seg01 = Segment_2(p1[i], p1[i+1]);
@@ -77,6 +67,45 @@ namespace CGAL_helpers{
 
         return intersect;
     }
+    bool check_intesection( Polygon_2 &p1, Polygon_2 &p2 ){
+        bool intersect = false;
+        switch (CGAL::bounded_side_2(p1.begin(), p1.end(), p2[0])) {
+            case CGAL::ON_BOUNDED_SIDE:
+            case CGAL::ON_BOUNDARY:
+                intersect = true;
+        }
+
+        if (!intersect)
+            switch (CGAL::bounded_side_2(p2.begin(), p2.end(), p1[0])) {
+                case CGAL::ON_BOUNDED_SIDE:
+                case CGAL::ON_BOUNDARY:
+                    intersect = true;
+            }
+        if( !intersect )
+            return check_intesection_seg(p1, p2);
+
+        return intersect;
+    }
+
+    bool check_intesection_inside( Polygon_2 &p1, Polygon_2 &p2 ){
+        bool intersect = false;
+        switch (CGAL::bounded_side_2(p1.begin(), p1.end(), p2[0])) {
+            case CGAL::ON_UNBOUNDED_SIDE:
+            case CGAL::ON_BOUNDARY:
+                intersect = true;
+        }
+
+        if (!intersect)
+            switch (CGAL::bounded_side_2(p2.begin(), p2.end(), p1[0])) {
+                case CGAL::ON_UNBOUNDED_SIDE:
+                case CGAL::ON_BOUNDARY:
+                    intersect = true;
+            }
+        if( !intersect )
+            return check_intesection_seg(p1, p2);
+
+        return intersect;
+    }
 
     kernel_type Calculate_Intersection_Area( Polygon_2 &p1, Polygon_2 &p2 ){
         //std::list<Polygon_with_holes_2> polyI;
@@ -89,7 +118,7 @@ namespace CGAL_helpers{
         }*/
         //std::cout << "totalArea = " << totalArea << std::endl;
         //return totalArea;
-        return a*0.5f;
+        return a;
     }
 
     Polygon_2 Get_Convex_Hull( std::vector<Point_2> &points ){

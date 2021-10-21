@@ -160,7 +160,7 @@ namespace Genetic {
             best_indexes[i] = pq.top().second;
             pq.pop();
         }
-        Genes_helpers::convert_genes<Genes_helpers::bit_parser_l1>(genes_population[best_indexes[0]], values);
+        Genes_helpers::convert_genes_V02<Genes_helpers::bit_parser_l1>(genes_population[best_indexes[0]], values, &rect);
         return {best_indexes, best_rect};
     }
 
@@ -211,7 +211,7 @@ namespace Genetic {
         std::size_t i = 1;
         std::size_t population_size = genes_population.size();
         for (std::size_t size_vector = 0.2*genes_population.size(); i < size_vector; ++i) {
-            if ( rand()%100 < 5 && i + 1 < size_vector ) {
+            if ( rand()%100 < 75 && i + 1 < size_vector ) {
                 Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
             }
             if ( rand()%100 < 5 ) {
@@ -222,23 +222,28 @@ namespace Genetic {
         for (std::size_t size_vector = 0.5*genes_population.size(); i < size_vector; ++i) {
             if ( rand()%100 < 10 && i + 1 < size_vector ) {
                 Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
-            }else if ( rand()%100 < 10 ) {
+            }
+
+            if ( rand()%100 < 80 ) {
                 Genes_helpers::mutation(genes_population[i], ( 2 * 1000 * i) / population_size);
             }
         }
 
         for (std::size_t size_vector = 0.75*genes_population.size(); i < size_vector; ++i) {
-            if ( rand()%100 < 40 && i + 1 < size_vector ) {
+            if ( rand()%100 < 80 && i + 1 < size_vector ) {
                 Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
-            }else if ( rand()%100 < 50 ) {
+            }
+            if ( rand()%100 < 80 ) {
                 Genes_helpers::mutation(genes_population[i], (10 * 1000 * i) / population_size);
             }
         }
 
         for (std::size_t size_vector = genes_population.size(); i < size_vector; ++i) {
-            if ( rand()%100 < 80 && i + 1 < size_vector ) {
+            if ( rand()%100 < 90 && i + 1 < size_vector ) {
                 Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
-            }else if ( rand()%100 < 90 ) {
+            }
+
+            if ( rand()%100 < 90 ) {
                 Genes_helpers::mutation(genes_population[i], ( 50 * 1000 * i) / population_size);
             }
         }
@@ -253,25 +258,28 @@ namespace Genetic {
         std::size_t i = 0.2*genes_population.size();
 
         for (std::size_t size_vector = 0.5*genes_population.size(); i < size_vector; ++i) {
-            if ( rand()%100 < 20 && i + 1 < size_vector ) {
+            if ( rand()%100 < 70 && i + 1 < size_vector ) {
                 Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
-            }else if ( rand()%100 < 30 ) {
+            }
+            if ( rand()%100 < 30 ) {
                 Genes_helpers::mutation(genes_population[i], 400);
             }
         }
 
         for (std::size_t size_vector = 0.75*genes_population.size(); i < size_vector; ++i) {
-            if ( rand()%100 < 75 && i + 1 < size_vector ) {
+            if ( rand()%100 < 10 && i + 1 < size_vector ) {
                 Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
-            }else if ( rand()%100 < 90 ) {
+            }
+            if ( rand()%100 < 90 ) {
                 Genes_helpers::mutation(genes_population[i], 1000);
             }
         }
 
         for (std::size_t size_vector = genes_population.size(); i < size_vector; ++i) {
-            if ( rand()%100 < 30 && i + 1 < size_vector ) {
+            if ( rand()%100 < 70 && i + 1 < size_vector ) {
                 Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
-            }else if ( rand()%100 < 100 ) {
+            }
+            if ( rand()%100 < 100 ) {
                 Genes_helpers::mutation(genes_population[i], 3000);
             }
         }
@@ -285,9 +293,10 @@ namespace Genetic {
         //keeps the best result untouched
         std::size_t i = 1;
         for (std::size_t size_vector = 0.2*genes_population.size(); i < size_vector; ++i) {
-            if ( rand()%100 < 5 && i + 1 < size_vector ) {
+            if ( rand()%100 < 75 && i + 1 < size_vector ) {
                 Genes_helpers::crossV02<T>(genes_population[i], genes_population[i + 1]);
-            }else if ( rand()%100 < 5 ) {
+            }
+            if ( rand()%100 < 5 ) {
                 Genes_helpers::mutationV02<T>(genes_population[i], (1000 * i) / size_vector );
             }
         }
@@ -296,7 +305,7 @@ namespace Genetic {
             if ( rand()%100 < 10 && i + 1 < size_vector ) {
                 Genes_helpers::crossV02<T>(genes_population[i], genes_population[i + 1]);
             }
-            if ( rand()%100 < 10 ) {
+            if ( rand()%100 < 80 ) {
                 Genes_helpers::mutationV02<T>(genes_population[i], (2000 * i) / size_vector);
             }
         }

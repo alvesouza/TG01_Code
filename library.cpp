@@ -97,6 +97,7 @@ boost::python::list GeneticAlgoV01( std::size_t Version, std::size_t Generations
 
     return GeneticRetunToPythonList( values_return );
 }
+
 boost::python::list GeneticAlgoV01_parser01( std::size_t Version, std::size_t Generations, std::size_t Population_Size, boost::python::list Positions,boost::python::list Vertexes ){
     return GeneticAlgoV01<Genes_helpers::bit_parser_l1>( Version, Generations, Population_Size, Positions, Vertexes );
 }
