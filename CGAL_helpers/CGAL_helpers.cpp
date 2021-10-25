@@ -147,6 +147,16 @@ namespace CGAL_helpers{
         return all_area;
     }
 
+    kernel_type All_Intersection_Inside_Board_Area( std::vector<Polygon_2> &polygons, Polygon_2 &board ){
+        kernel_type all_area = 0;
+        for (std::size_t i = 0, size = polygons.size(); i < size; ++i) {
+            all_area += check_intesection_inside( polygons[i], board );
+        }
+
+        return all_area;
+
+    }
+
     kernel_type Min_Rect_XY_Area( std::vector<Polygon_2> &polygons ){
         kernel_type x_min = polygons[0][0].x(),x_max = polygons[0][0].x();
         kernel_type y_min = polygons[0][0].y(), y_max = polygons[0][0].y();

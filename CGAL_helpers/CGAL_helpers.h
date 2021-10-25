@@ -22,6 +22,7 @@ namespace CGAL_helpers{
     Polygon_2 Get_Convex_Hull( std::vector<Point_2> &points );
 
     kernel_type All_Intersection_Area( std::vector<Polygon_2> &polygons );
+    kernel_type All_Intersection_Inside_Board_Area( std::vector<Polygon_2> &polygons, Polygon_2 &board );
 
     kernel_type Min_Rect_XY_Area( std::vector<Polygon_2> &polygons );
     kernel_type Min_Rect_XY_Area_V01( std::vector<Polygon_2> &polygons );

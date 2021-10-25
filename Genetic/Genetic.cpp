@@ -58,6 +58,12 @@ namespace Genetic {
         return area_rect + intersection_areas*multiply_intersection_area;
     }
 
+    float Score_Knolling_V01(std::vector<Polygon_2> &p, Polygon_2 &board, const float multiply_intersection_area){
+        kernel_type intersection_from_others = CGAL_helpers::All_Intersection_Area(p);
+        kernel_type intersection_board = CGAL_helpers::All_Intersection_Inside_Board_Area( p, board );
+        return intersection_from_others + intersection_board*multiply_intersection_area;
+    }
+
     Score_struct Score_V02(std::vector<Polygon_2> &p, const float multiply_intersection_area){
         CGAL_helpers::Rect_info rect_inf = CGAL_helpers::Min_Rect_XY_Area_V02(p);
         kernel_type intersection_areas = CGAL_helpers::All_Intersection_Area(p);
