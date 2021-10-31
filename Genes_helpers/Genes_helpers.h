@@ -44,6 +44,8 @@ namespace Genes_helpers {
     template<class T>
     void crossV02(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b);
 
+    template<class T>
+    void crossV03(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b, const float cross_odds );
 
     template<class T>
     extern void convert_genes(boost::dynamic_bitset<> &genes, std::vector<State> &Values){

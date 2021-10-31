@@ -20,7 +20,7 @@ namespace Genes_helpers {
 
         for (boost::dynamic_bitset<>::size_type i = object_size*(rand()%number_of_objects),
                 last = i + object_size*(1+rand()%(number_of_objects - i/object_size)); i < last; ++i) {
-            a[i] ^= (rand()%100001 < rate);
+            a[i] ^= (rand()%100000 < rate);
         }
     }
     template void mutationV02<bit_parser_l1>(boost::dynamic_bitset<> &a, uint rate);
@@ -87,6 +87,24 @@ namespace Genes_helpers {
 
     template void crossV02<bit_parser_l1>(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b);
     template void crossV02<bit_parser_l3>(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b);
+
+    template<class T>
+    void crossV03(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b, const float cross_odds ){
+        const std::size_t object_size = sizeof(T)*8;
+        boost::dynamic_bitset<>::size_type number_objects = a.size()/object_size;
+        bool aux;
+        for (boost::dynamic_bitset<>::size_type i = 0; i < a.size(); i + object_size) {
+            if( rand() % 100000 < cross_odds )
+                for (boost::dynamic_bitset<>::size_type j = 0; i < number_objects && j < object_size ; j++){
+                    aux = a[i+j];
+                    a[i+j] = b[i+j];
+                    b[i+j] = aux;
+                }
+        }
+    }
+
+    template void crossV03<bit_parser_l1>(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b, const float cross_odds = 10000);
+    template void crossV03<bit_parser_l3>(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b, const float cross_odds = 10000);
 
     template void convert_genes<bit_parser_l1>(boost::dynamic_bitset<> &genes, std::vector<State> &Values);
     template void convert_genes<bit_parser_l3>(boost::dynamic_bitset<> &genes, std::vector<State> &Values);

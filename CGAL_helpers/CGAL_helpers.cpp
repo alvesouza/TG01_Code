@@ -46,71 +46,70 @@ namespace CGAL_helpers{
         }
     }
 
-    inline bool check_intesection_seg( Polygon_2 &p1, Polygon_2 &p2 ){
+    inline kernel_type check_intesection_seg( Polygon_2 &p1, Polygon_2 &p2 ){
         Segment_2 seg01, seg02;
-        bool intersect = false;
-        for (std::size_t i = 0, size_01 = p1.size(); i < size_01 && !intersect; i++){
+        kernel_type intersections = 0;
+        for (std::size_t i = 0, size_01 = p1.size(); i < size_01; i++){
             if ( i +1 < size_01 )
                 seg01 = Segment_2(p1[i], p1[i+1]);
             else
                 seg01 = Segment_2(p1[i], p1[0]);
 
-            for (std::size_t j = 0, size_02 = p2.size(); j < size_02 && !intersect; j++){
+            for (std::size_t j = 0, size_02 = p2.size(); j < size_02; j++){
                 if ( j +1 < size_02 )
                     seg02 = Segment_2(p2[j], p2[j+1]);
                 else
                     seg02 = Segment_2(p2[j], p2[0]);
 
-                intersect = CGAL::do_intersect(seg01, seg02);
+                intersections += CGAL::do_intersect(seg01, seg02);
             }
         }
 
-        return intersect;
+        return intersections;
     }
-    bool check_intesection( Polygon_2 &p1, Polygon_2 &p2 ){
-        bool intersect = false;
-        switch (CGAL::bounded_side_2(p1.begin(), p1.end(), p2[0])) {
-            case CGAL::ON_BOUNDED_SIDE:
-            case CGAL::ON_BOUNDARY:
-                intersect = true;
-        }
+    kernel_type check_intesection( Polygon_2 &p1, Polygon_2 &p2 ){
+        kernel_type intersections = check_intesection_seg(p1, p2);
 
-        if (!intersect)
+        if( intersections == 0 )
+            switch (CGAL::bounded_side_2(p1.begin(), p1.end(), p2[0])) {
+                case CGAL::ON_BOUNDED_SIDE:
+                case CGAL::ON_BOUNDARY:
+                    return p1.size()*p2.size();
+            }
+
+        if ( intersections == 0 )
             switch (CGAL::bounded_side_2(p2.begin(), p2.end(), p1[0])) {
                 case CGAL::ON_BOUNDED_SIDE:
                 case CGAL::ON_BOUNDARY:
-                    intersect = true;
+                    return p1.size()*p2.size();
             }
-        if( !intersect )
-            return check_intesection_seg(p1, p2);
-
-        return intersect;
+        return intersections;
     }
 
-    bool check_intesection_inside( Polygon_2 &p1, Polygon_2 &p2 ){
-        bool intersect = false;
-        switch (CGAL::bounded_side_2(p1.begin(), p1.end(), p2[0])) {
-            case CGAL::ON_UNBOUNDED_SIDE:
-            case CGAL::ON_BOUNDARY:
-                intersect = true;
-        }
+    kernel_type check_intesection_inside( Polygon_2 &p1, Polygon_2 &p2 ){
+        kernel_type intersections = check_intesection_seg(p1, p2);
 
-        if (!intersect)
+        if( intersections == 0 )
+            switch (CGAL::bounded_side_2(p1.begin(), p1.end(), p2[0])) {
+                case CGAL::ON_UNBOUNDED_SIDE:
+                case CGAL::ON_BOUNDARY:
+                    return p1.size()*p2.size();
+            }
+
+        if ( intersections == 0 )
             switch (CGAL::bounded_side_2(p2.begin(), p2.end(), p1[0])) {
                 case CGAL::ON_UNBOUNDED_SIDE:
                 case CGAL::ON_BOUNDARY:
-                    intersect = true;
+                    return p1.size()*p2.size();
             }
-        if( !intersect )
-            return check_intesection_seg(p1, p2);
 
-        return intersect;
+        return intersections;
     }
 
     kernel_type Calculate_Intersection_Area( Polygon_2 &p1, Polygon_2 &p2 ){
         //std::list<Polygon_with_holes_2> polyI;
         //CGAL::intersection( p1, p2, std::back_inserter(polyI));
-        bool a = check_intesection(p1, p2);
+        kernel_type a = check_intesection(p1, p2);
         //kernel_type totalArea = 0;
         /*for(std::list<Polygon_with_holes_2>::iterator lit = polyI.begin(); lit != polyI.end(); ++lit)
         {

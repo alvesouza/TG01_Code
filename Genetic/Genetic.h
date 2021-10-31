@@ -62,6 +62,10 @@ namespace Genetic {
     template <class T>
     geneticReturn Genetic_Algo_V03(std::vector<Polygon_2> &p,
                                                        std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations);
+
+    template<class T>
+    geneticReturn Genetic_Algo_knolling_V01(std::vector<Polygon_2> &p, Polygon_2 &board,
+                                            std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations);
 }
 
 

@@ -101,6 +101,79 @@ boost::python::list GeneticAlgoV01( std::size_t Version, std::size_t Generations
 boost::python::list GeneticAlgoV01_parser01( std::size_t Version, std::size_t Generations, std::size_t Population_Size, boost::python::list Positions,boost::python::list Vertexes ){
     return GeneticAlgoV01<Genes_helpers::bit_parser_l1>( Version, Generations, Population_Size, Positions, Vertexes );
 }
+Polygon_2 Board_2_Polygon( boost::python::list Vertexes_Board ){
+    std::vector<Cad_Data> vec_data;
+
+    ssize_t size_list = len( Vertexes_Board );
+    ssize_t i = 0;
+    std::vector<Point_2> points;
+    while ( i < size_list ){
+        kernel_type aux1 = python::extract<kernel_type>(Vertexes_Board[i][0]);
+        kernel_type aux2 = python::extract<kernel_type>(Vertexes_Board[i][1]);
+        kernel_type aux3 = python::extract<kernel_type>(Vertexes_Board[i][2]);
+        printf( "(%f, %f, %f) ", aux1, aux2, aux3 );
+        points.push_back(Point_2(
+                python::extract<kernel_type>(Vertexes_Board[i][0]),
+                python::extract<kernel_type>(Vertexes_Board[i][1])
+        ));
+        i++;
+    }
+
+    return Polygon_2(points.begin(), points.end());
+
+}
+template <class T>
+boost::python::list GeneticAlgo_knolling_V01( std::size_t Version,
+                                              std::size_t Generations,
+                                              std::size_t Population_Size,
+                                              boost::python::list Positions,
+                                              boost::python::list Vertexes,
+                                              boost::python::list Positions_Board,
+                                              boost::python::list Vertexes_Board
+                                              ){
+
+    printf("Polygons ///////////////////////\n");
+    std::vector<Polygon_2> Polygons = CreatePolygon_2FromCadData( Positions, Vertexes );
+    printf("Board ///////////////////////\n");
+    Polygon_2 Board = Board_2_Polygon( Vertexes_Board );
+
+    Write_PolygonVertexes( Board );
+    printf("Prepare Genes ///////////////////////\n");
+    std::vector<boost::dynamic_bitset<>> genes = Genetic::Create_Genetic_Population_V01<T>(
+            Population_Size, Polygons.size());
+    std::vector<Genes_helpers::State> values;
+    Genetic::geneticReturn values_return;
+
+    printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
+    printf("genes size = %ld", genes[0].size());
+    printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
+    switch (Version) {
+        case 1:
+            values_return = Genetic::Genetic_Algo_knolling_V01<T>( Polygons, Board, genes, Generations );
+            break;
+        default:
+            values_return = Genetic::Genetic_Algo_knolling_V01<T>( Polygons, Board, genes, Generations );
+    }
+
+    return GeneticRetunToPythonList( values_return );
+}
+
+boost::python::list GeneticAlgo_knolling_V01_parser01( std::size_t Version,
+                                                       std::size_t Generations,
+                                                       std::size_t Population_Size,
+                                                       boost::python::list Positions,
+                                                       boost::python::list Vertexes,
+                                                       boost::python::list Positions_Board,
+                                                       boost::python::list Vertexes_Board
+){
+    return GeneticAlgo_knolling_V01<Genes_helpers::bit_parser_l1>( Version,
+                                                                    Generations,
+                                                                    Population_Size,
+                                                                    Positions,
+                                                                    Vertexes,
+                                                                    Positions_Board,
+                                                                    Vertexes_Board);
+}
 boost::python::list Point_3toPythonList(Point_3 point){
     boost::python::list list;
     list.append(point[0]);
@@ -290,6 +363,7 @@ void Add_Module_Genetic_Algo(){
     using namespace boost::python;
     //GeneticAlgoV01( int Version, std::size_t Generations, std::size_t Population_Size, boost::python::list Positions,boost::python::list Vertexes )
     def("GeneticAlgoV01_parser01", GeneticAlgoV01_parser01 );
+    def("GeneticAlgo_knolling_V01_parser01", GeneticAlgo_knolling_V01_parser01 );
 }
 
 BOOST_PYTHON_MODULE(TG01_Code)

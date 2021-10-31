@@ -11,15 +11,15 @@ def makeRotatingPlacement(axis_origin, axis_dir, angle):
 
 def Rotate2ShorterstHeight( objs ):
     for obj in objs:
-        #print('\n////////////////////////////////////////\nlabel is {0}'.format(q))
+        '''print('\n////////////////////////////////////////\nlabel is {0}'.format(objs))'''
         if 'Shape' in dir(obj):
-            if str(type(obj)) == "<class 'PartDesign.Body'>":
+            if str(type(obj)) == "<class 'PartDesign.Body'>" and obj.Label != "Board Body":
                 s = obj.Shape
                 p = obj.Placement
                 b = p.Base
                 r = p.Rotation
                 faces = s.Faces
-                #print(dir(faces[0]))
+                '''print(dir(faces[0]))'''
                 size_list = len(faces)
                 best_face = -1
                 smallest_height = 9999999
@@ -32,16 +32,16 @@ def Rotate2ShorterstHeight( objs ):
                             distance = faces[i].distToShape( vertex )[0]
                             if height < distance:
                                 height = distance
-                    #print( "height = ", height )
+                    '''print( "height = ", height )'''
                     if height < smallest_height:
                         smallest_height = height
                         best_face = i
 
-                print( "best_face = {0}, smallest_height = {1}".format(best_face, smallest_height) )
+                '''print( "best_face = {0}, smallest_height = {1}".format(best_face, smallest_height) )'''
                 uv = faces[ best_face ].Surface.parameter(faces[ best_face ].CenterOfMass)
                 faceNormalInCOM = faces[ best_face ].normalAt(uv[0], uv[1])
                 #print("dir face = {0}".format( dir( faces[ best_face ] )))
-                print( "Faces Normal = {0}".format(faceNormalInCOM) )
+                '''print( "Faces Normal = {0}".format(faceNormalInCOM) )'''
                 center_mass = faces[best_face].CenterOfMass
                 angle = acos( -faceNormalInCOM[2] )*180/(pi)
                 spin = makeRotatingPlacement(App.Vector(b[0], b[1], b[2]), App.Vector(-faceNormalInCOM[1], faceNormalInCOM[0], 0), angle)
@@ -51,7 +51,7 @@ def LowestHeightOnZero( objs ):
     for obj in objs:
         #print('\n////////////////////////////////////////\nlabel is {0}'.format(q))
         if 'Shape' in dir(obj):
-            if str(type(obj)) == "<class 'PartDesign.Body'>":
+            if str(type(obj)) == "<class 'PartDesign.Body'>" and obj.Label != "Board Body":
                 s = obj.Shape
                 p = obj.Placement
                 b = p.Base
@@ -74,10 +74,10 @@ def GetPositionsValues( objs ):
     CadData = []
     for obj in objs:
         if 'Shape' in dir(obj):
-            if str(type(obj)) == "<class 'PartDesign.Body'>":
+            if str(type(obj)) == "<class 'PartDesign.Body'>" and obj.Label != "Board Body":
                 # c = obj.Content
                 l = obj.Label
-                print("{0} Object type = {1}\n".format(l, str(type(obj))))
+                '''print("{0} Object type = {1}\n".format(l, str(type(obj))))'''
                 p = obj.Placement
                 b = p.Base
                 positions.append( [ b[ 0 ], b[ 1 ], b[ 2 ] ] )
@@ -85,10 +85,10 @@ def GetPositionsValues( objs ):
                 vertexes_list = []
                 for vert in vertexes:
                     vertexes_list.append([vert.Point[0], vert.Point[1], vert.Point[2]])
-                    try:
+                    '''try:
                         print('label is {0} content is {1}'.format(l, [vert.Point[0], vert.Point[1], vert.Point[2]]))
                     except:
-                        print('label is %s \\n'.format(l))
+                        print('label is %s \\n'.format(l))'''
 
                 vertexesAll.append(vertexes_list)
     return [ positions, vertexesAll ]
@@ -96,7 +96,7 @@ def GetPositionsValues( objs ):
 def PlaceObjects( objs, values ):
     i = 0
     for obj in objs:
-        #print('\n////////////////////////////////////////\nlabel is {0}'.format(q))
+        print('\n////////////////////////////////////////\nlabel is {0}'.format(q))
         if 'Shape' in dir(obj):
             if str(type(obj)) == "<class 'PartDesign.Body'>":
                 s = obj.Shape
@@ -116,7 +116,17 @@ def PlaceObjects( objs, values ):
                 obj.Placement = App.Placement(App.Vector(value[ 0 ][ 0 ], value[ 0 ][ 1 ], b[2]), r)
                 i += 1
 
+def GetBoard( objs ):
+    for obj in objs:
+        if obj.Label == "Board":
+            vertexes = obj.Shape.Vertexes
+            vertexes_list = []
+            for vert in vertexes:
+                vertexes_list.append([vert.Point[0], vert.Point[1], 0])
+            return vertexes_list
+
 if __name__ == '__main__':
+    vertex_board = [[0.0, 0.0, 0], [162.987976, 0.0, 0], [208.596848, 45.861645, 0], [283.270172, 52.121681, 0], [243.027069, 144.233688, 0], [93.68040499999998, 159.436646, 0], [29.738585999999998, 102.201996, 0]]
     values = [
         [
             [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]
@@ -216,8 +226,8 @@ if __name__ == '__main__':
         ]
     ]
 
-    new_values = TG01_Code.GeneticAlgoV01_parser01( 3, 1000, 10000, values[0], values[1] )
-
+    new_values = TG01_Code.GeneticAlgoV01_parser01( 1, 10000, 1000, values[0], values[1] )
+    #new_values = TG01_Code.GeneticAlgo_knolling_V01_parser01(1, 100, 10000, values[0], values[1], [[0, 0, 0]], vertex_board)
     positions = new_values[0]
     areas = new_values[1]
     scores = new_values[2]
