@@ -1,6 +1,7 @@
 #include "library.h"
 #include "boost/python/suite/indexing/vector_indexing_suite.hpp"
 #include <iostream>
+#include <stdlib.h>
 
 void hello() {
     std::cout << "Hello, World!" << std::endl;
@@ -74,6 +75,7 @@ std::vector<Polygon_2> CreatePolygon_2FromCadData( boost::python::list Positions
 template <class T>
 boost::python::list GeneticAlgoV01( std::size_t Version, std::size_t Generations, std::size_t Population_Size, boost::python::list Positions,boost::python::list Vertexes,
                                     const int version_cross, const int version_mutation){
+    srand(10);
     std::vector<Polygon_2> Polygons = CreatePolygon_2FromCadData( Positions, Vertexes );
 
     std::vector<boost::dynamic_bitset<>> genes = Genetic::Create_Genetic_Population_V01<T>(
@@ -141,6 +143,7 @@ boost::python::list GeneticAlgo_knolling_V01( std::size_t Version,
                                               const int version_mutation
                                               ){
 
+    srand(10);
     printf("Polygons ///////////////////////\n");
     std::vector<Polygon_2> Polygons = CreatePolygon_2FromCadData( Positions, Vertexes );
     printf("Board ///////////////////////\n");
