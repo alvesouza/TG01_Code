@@ -8,7 +8,7 @@ namespace Genes_helpers {
 
     void mutation(boost::dynamic_bitset<> &a, uint rate){
         for (boost::dynamic_bitset<>::size_type i = 0, size = a.size(); i < size; ++i) {
-            a[i] ^= (rand()%100001 < rate);
+            a[i] ^= (rand()%100000 < rate);
         }
     }
 
@@ -23,8 +23,23 @@ namespace Genes_helpers {
             a[i] ^= (rand()%100000 < rate);
         }
     }
-    template void mutationV02<bit_parser_l1>(boost::dynamic_bitset<> &a, uint rate);
-    template void mutationV02<bit_parser_l3>(boost::dynamic_bitset<> &a, uint rate);
+    template void mutationV02<bit_parser_l1>(boost::dynamic_bitset<> &a, const uint rate);
+    template void mutationV02<bit_parser_l3>(boost::dynamic_bitset<> &a, const uint rate);
+
+    template<class T>
+    void mutationV03(boost::dynamic_bitset<> &a, const uint rate, const uint object_rate ){
+        const std::size_t object_size = sizeof(T)*8;
+        boost::dynamic_bitset<>::size_type number_objects = a.size()/object_size;
+        for (boost::dynamic_bitset<>::size_type i = 0; i < a.size(); i += object_size) {
+            if( rand() % 100000 < object_rate )
+                for (boost::dynamic_bitset<>::size_type j = 0; i + j < a.size() && j < object_size ; j++){
+                    a[i+j] ^= (rand()%100000 < rate);
+                }
+        }
+    }
+
+    template void mutationV03<bit_parser_l1>(boost::dynamic_bitset<> &a, const uint rate = 10000, const uint object_rate = 10000 );
+    template void mutationV03<bit_parser_l3>(boost::dynamic_bitset<> &a, const uint rate = 10000, const uint object_rate = 10000 );
 
     State Convert_Bits( bit_parser_l3 *bits ){
         State value;
@@ -42,7 +57,7 @@ namespace Genes_helpers {
         val = val >> 14;
         value.Position[1] = ((val&16383)%10000)/10.0f;
         val = val >> 14;//now last 4 bits
-        value.angle = val*12;
+        value.angle = val*24;
 
         return value;
     }
@@ -54,7 +69,7 @@ namespace Genes_helpers {
         val = val >> 14;
         value.Position[1] = (((val&16383)%10000)/10000.0f)*(rect->y_max);
         val = val >> 14;//now last 4 bits
-        value.angle = val*12;
+        value.angle = val*24;
 
         return value;
     }
@@ -89,13 +104,13 @@ namespace Genes_helpers {
     template void crossV02<bit_parser_l3>(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b);
 
     template<class T>
-    void crossV03(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b, const float cross_odds ){
+    void crossV03(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b, const uint cross_odds ){
         const std::size_t object_size = sizeof(T)*8;
         boost::dynamic_bitset<>::size_type number_objects = a.size()/object_size;
         bool aux;
-        for (boost::dynamic_bitset<>::size_type i = 0; i < a.size(); i + object_size) {
+        for (boost::dynamic_bitset<>::size_type i = 0; i < a.size(); i += object_size) {
             if( rand() % 100000 < cross_odds )
-                for (boost::dynamic_bitset<>::size_type j = 0; i < number_objects && j < object_size ; j++){
+                for (boost::dynamic_bitset<>::size_type j = 0; i + j < a.size() && j < object_size ; j++){
                     aux = a[i+j];
                     a[i+j] = b[i+j];
                     b[i+j] = aux;
@@ -103,8 +118,8 @@ namespace Genes_helpers {
         }
     }
 
-    template void crossV03<bit_parser_l1>(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b, const float cross_odds = 10000);
-    template void crossV03<bit_parser_l3>(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b, const float cross_odds = 10000);
+    template void crossV03<bit_parser_l1>(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b, const uint cross_odds = 10000);
+    template void crossV03<bit_parser_l3>(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b, const uint cross_odds = 10000);
 
     template void convert_genes<bit_parser_l1>(boost::dynamic_bitset<> &genes, std::vector<State> &Values);
     template void convert_genes<bit_parser_l3>(boost::dynamic_bitset<> &genes, std::vector<State> &Values);

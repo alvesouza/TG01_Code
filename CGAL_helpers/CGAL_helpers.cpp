@@ -34,6 +34,19 @@ namespace CGAL_helpers{
         }
     }
 
+    kernel_type Polygons_Area( std::vector<Polygon_2> &polygons ){
+        kernel_type area = 0, area_aux;
+
+        for ( ssize_t i = 0, size = polygons.size() ; i < size; ++i) {
+            if( polygons[i].area() < 0 )
+                area -= polygons[i].area();
+            else
+                area += polygons[i].area();
+        }
+
+        return area;
+    }
+
     void Rotate_Polygon_degree(Polygon_2 &p, const float angle){
         Rotate_Polygon_radian(p, angle*180/CGAL_PI);
     }
@@ -189,9 +202,13 @@ namespace CGAL_helpers{
 
                 if ( x > x_max)
                     x_max = x;
+                else if (x < 0)
+                    return 9999999999;
 
                 if ( y > y_max)
                     y_max = y;
+                else if (y < 0)
+                    return 9999999999;
             }
         }
         return x_max*y_max;
@@ -209,9 +226,13 @@ namespace CGAL_helpers{
 
                 if ( x > x_max)
                     x_max = x;
+                else if (x < 0)
+                    return {9999999, 9999999, 9999999};
 
                 if ( y > y_max)
                     y_max = y;
+                else if (y < 0)
+                    return {9999999, 9999999, 9999999};
             }
         }
 

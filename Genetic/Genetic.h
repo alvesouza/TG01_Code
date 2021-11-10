@@ -49,23 +49,34 @@ namespace Genetic {
         std::vector<float> area;
         std::vector<float> scores;
         std::vector<float> time;
+        kernel_type total_area;
+        kernel_type board_area;
         std::vector<Genes_helpers::State> values;
     } geneticReturn;
 
     template <class T>
+    geneticReturn Genetic_Algo_Standard(std::vector<Polygon_2> &p,
+                                   std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations,
+                                   const int version_cross, const int version_mutation);
+
+    template <class T>
     geneticReturn Genetic_Algo_V01(std::vector<Polygon_2> &p,
-                               std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations);
+                                   std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations,
+                                   const int version_cross, const int version_mutation);
 
     template <class T>
     geneticReturn Genetic_Algo_V02(std::vector<Polygon_2> &p,
-                                                       std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations);
+                                    std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations,
+                                        const int version_cross, const int version_mutation);
     template <class T>
     geneticReturn Genetic_Algo_V03(std::vector<Polygon_2> &p,
-                                                       std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations);
+                                        std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations,
+                                            const int version_cross, const int version_mutation);
 
     template<class T>
     geneticReturn Genetic_Algo_knolling_V01(std::vector<Polygon_2> &p, Polygon_2 &board,
-                                            std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations);
+                                                std::vector<boost::dynamic_bitset<>> &genes_population, std::size_t generations,
+                                                    const int version_cross, const int version_mutation);
 }
 
 

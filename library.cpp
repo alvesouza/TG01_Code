@@ -39,6 +39,8 @@ boost::python::list GeneticRetunToPythonList(Genetic::geneticReturn genReturn ){
     boost::python::list list;
 
     list.append(MultipleStatesToPythonList(genReturn.values));
+    list.append(genReturn.total_area);
+    list.append(genReturn.board_area);
     list.append(toPythonList<float>(genReturn.area));
     list.append(toPythonList<float>(genReturn.scores));
     list.append(toPythonList<float>(genReturn.scoresFinal));
@@ -70,7 +72,8 @@ std::vector<Polygon_2> CreatePolygon_2FromCadData( boost::python::list Positions
 }
 
 template <class T>
-boost::python::list GeneticAlgoV01( std::size_t Version, std::size_t Generations, std::size_t Population_Size, boost::python::list Positions,boost::python::list Vertexes ){
+boost::python::list GeneticAlgoV01( std::size_t Version, std::size_t Generations, std::size_t Population_Size, boost::python::list Positions,boost::python::list Vertexes,
+                                    const int version_cross, const int version_mutation){
     std::vector<Polygon_2> Polygons = CreatePolygon_2FromCadData( Positions, Vertexes );
 
     std::vector<boost::dynamic_bitset<>> genes = Genetic::Create_Genetic_Population_V01<T>(
@@ -82,24 +85,28 @@ boost::python::list GeneticAlgoV01( std::size_t Version, std::size_t Generations
     printf("genes size = %ld", genes[0].size());
     printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
     switch (Version) {
+        case 0:
+            values_return = Genetic::Genetic_Algo_Standard<T>(Polygons,genes, Generations, version_cross, version_mutation );
+            break;
         case 1:
-            values_return = Genetic::Genetic_Algo_V01<T>(Polygons,genes, Generations );
+            values_return = Genetic::Genetic_Algo_V01<T>(Polygons,genes, Generations, version_cross, version_mutation );
             break;
         case 2:
-            values_return = Genetic::Genetic_Algo_V02<T>(Polygons,genes, Generations );
+            values_return = Genetic::Genetic_Algo_V02<T>(Polygons,genes, Generations, version_cross, version_mutation );
             break;
         case 3:
-            values_return = Genetic::Genetic_Algo_V03<T>(Polygons,genes, Generations );
+            values_return = Genetic::Genetic_Algo_V03<T>(Polygons,genes, Generations, version_cross, version_mutation );
             break;
         default:
-            values_return = Genetic::Genetic_Algo_V01<T>(Polygons,genes, Generations );
+            values_return = Genetic::Genetic_Algo_V01<T>(Polygons,genes, Generations, version_cross, version_mutation );
     }
 
     return GeneticRetunToPythonList( values_return );
 }
 
-boost::python::list GeneticAlgoV01_parser01( std::size_t Version, std::size_t Generations, std::size_t Population_Size, boost::python::list Positions,boost::python::list Vertexes ){
-    return GeneticAlgoV01<Genes_helpers::bit_parser_l1>( Version, Generations, Population_Size, Positions, Vertexes );
+boost::python::list GeneticAlgoV01_parser01( std::size_t Version, std::size_t Generations, std::size_t Population_Size, boost::python::list Positions,boost::python::list Vertexes,
+                                             const int version_cross, const int version_mutation ){
+    return GeneticAlgoV01<Genes_helpers::bit_parser_l1>( Version, Generations, Population_Size, Positions, Vertexes, version_cross, version_mutation );
 }
 Polygon_2 Board_2_Polygon( boost::python::list Vertexes_Board ){
     std::vector<Cad_Data> vec_data;
@@ -129,7 +136,9 @@ boost::python::list GeneticAlgo_knolling_V01( std::size_t Version,
                                               boost::python::list Positions,
                                               boost::python::list Vertexes,
                                               boost::python::list Positions_Board,
-                                              boost::python::list Vertexes_Board
+                                              boost::python::list Vertexes_Board,
+                                              const int version_cross,
+                                              const int version_mutation
                                               ){
 
     printf("Polygons ///////////////////////\n");
@@ -149,10 +158,10 @@ boost::python::list GeneticAlgo_knolling_V01( std::size_t Version,
     printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
     switch (Version) {
         case 1:
-            values_return = Genetic::Genetic_Algo_knolling_V01<T>( Polygons, Board, genes, Generations );
+            values_return = Genetic::Genetic_Algo_knolling_V01<T>( Polygons, Board, genes, Generations, version_cross, version_mutation );
             break;
         default:
-            values_return = Genetic::Genetic_Algo_knolling_V01<T>( Polygons, Board, genes, Generations );
+            values_return = Genetic::Genetic_Algo_knolling_V01<T>( Polygons, Board, genes, Generations, version_cross, version_mutation );
     }
 
     return GeneticRetunToPythonList( values_return );
@@ -164,7 +173,9 @@ boost::python::list GeneticAlgo_knolling_V01_parser01( std::size_t Version,
                                                        boost::python::list Positions,
                                                        boost::python::list Vertexes,
                                                        boost::python::list Positions_Board,
-                                                       boost::python::list Vertexes_Board
+                                                       boost::python::list Vertexes_Board,
+                                                       const int version_cross,
+                                                       const int version_mutation
 ){
     return GeneticAlgo_knolling_V01<Genes_helpers::bit_parser_l1>( Version,
                                                                     Generations,
@@ -172,7 +183,7 @@ boost::python::list GeneticAlgo_knolling_V01_parser01( std::size_t Version,
                                                                     Positions,
                                                                     Vertexes,
                                                                     Positions_Board,
-                                                                    Vertexes_Board);
+                                                                    Vertexes_Board, version_cross, version_mutation);
 }
 boost::python::list Point_3toPythonList(Point_3 point){
     boost::python::list list;
@@ -259,6 +270,8 @@ std::vector<Cad_Data> get_Cad_Data( python::list vertexes, python::list position
                     python::extract<kernel_type>(vertex_list[1]) - cad_new.position[1],
                     python::extract<kernel_type>(vertex_list[2]) - cad_new.position[2]
                     ) );
+            //printf("Flag01\n");
+            //printf("( %f, %f, %f )\n", cad_new.vertexes[j][0], cad_new.vertexes[j][1], cad_new.vertexes[j][2]);
             j++;
         }
 

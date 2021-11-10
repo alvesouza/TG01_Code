@@ -21,6 +21,7 @@ def Rotate2ShorterstHeight( objs ):
                 faces = s.Faces
                 '''print(dir(faces[0]))'''
                 size_list = len(faces)
+                print("len = ", len(faces), "obj.Label = ", obj.Label)
                 best_face = -1
                 smallest_height = 9999999
                 for i in range( size_list ):
@@ -32,7 +33,7 @@ def Rotate2ShorterstHeight( objs ):
                             distance = faces[i].distToShape( vertex )[0]
                             if height < distance:
                                 height = distance
-                    '''print( "height = ", height )'''
+                    print( "height = ", height )
                     if height < smallest_height:
                         smallest_height = height
                         best_face = i
@@ -61,12 +62,20 @@ def LowestHeightOnZero( objs ):
                 size_list = len(faces)
                 best_face = -1
                 lowest_height = 9999999
+                highest_x = -9999999
+                highest_y = -9999999
                 for vertex in s.Vertexes:
                     Point = vertex.Point
                     if lowest_height > Point[2]:
                         lowest_height = Point[2]
+                    if highest_x < Point[0]:
+                        highest_x = Point[0]
+                    if highest_y < Point[1]:
+                        highest_y = Point[1]
                 #obj.Placement = App.Placement(App.Vector(b[0], b[1], b[2] - lowest_height), r)
-                obj.Placement = App.Placement(App.Vector( 0, 0, b[2] - lowest_height), r)
+                #obj.Placement = App.Placement(App.Vector(b[0], b[1], b[2] - lowest_height), r)
+                print( "Label = ", obj.Label )
+                obj.Placement = App.Placement(App.Vector( b[0]-highest_x, b[1]-highest_y, b[2] - lowest_height), r)
 
 def GetPositionsValues( objs ):
     vertexesAll = []
@@ -112,7 +121,7 @@ def PlaceObjects( objs, values ):
                 b = p.Base
                 r = p.Rotation
 
-                obj.Placement = App.Placement(App.Vector(value[ 0 ][ 0 ], value[ 0 ][ 1 ], b[2]), r)
+                obj.Placement = App.Placement(App.Vector(value[ 0 ][ 0 ] + b[0], value[ 0 ][ 1 ] + b[1], b[2]), r)
                 i += 1
 
 def GetBoard( objs ):
@@ -123,6 +132,32 @@ def GetBoard( objs ):
             for vert in vertexes:
                 vertexes_list.append([vert.Point[0], vert.Point[1], 0])
             return vertexes_list
+def WriteValues( values ):
+    print( "values = [" )
+    print("             [")
+    for i in range(len(values[0])):
+        print("                 ", values[0][i], end="")
+        if i + 1 < len(values[0]):
+            print(",")
+        else:
+            print("\n], [");
+
+    for i in range( len( values[1] ) ):
+        print( " [ " )
+        for j in range(len(values[1][i])):
+            if j == 0:
+                print("         ", end ="")
+            print( values[1][i][j], end="" )
+            if j + 1 < len( values[1][i] ):
+                if j%2 == 0:
+                    print(", ", end="")
+                else:
+                    print(", ", end="\n         ")
+            else:
+                print("\n]", end="")
+                if i + 1 != len( values[1] ):
+                    print("", end=",")
+    print( "]] " )
 
 if __name__ == '__main__':
     doc = FreeCAD.ActiveDocument
@@ -139,9 +174,14 @@ if __name__ == '__main__':
     LowestHeightOnZero(objs)
     values = GetPositionsValues(objs)
 
-    print("positions = ", values )
+    WriteValues( values )
     #new_values = TG01_Code.GeneticAlgoV01_parser01( 1, 1000,1000, values[0], values[1] )
-    new_values = TG01_Code.GeneticAlgo_knolling_V01_parser01( 1, 10, 1000000, values[0], values[1], [[0,0,0]], vertex_board )
-    PlaceObjects( objs, new_values[0] )
+    #new_values = TG01_Code.GeneticAlgo_knolling_V01_parser01( 1, 1000, 1000, values[0], values[1], [[0,0,0]], vertex_board, 3, 3)
 
-    print("positions = ", new_values[0] )
+    
+    #scores = new_values[4]
+    #scores_Final = new_values[5]
+    #print("new positions = ", new_values[0] )
+    #print("scores = ", scores  )
+    #print("scores_Final = ", scores_Final )
+    #PlaceObjects( objs, new_values[0] )

@@ -13,6 +13,9 @@ namespace CGAL_helpers{
     };
     inline float angle_radian( const Vector_2 &v, const Vector_2 &u );
     void Rotate_Polygon_radian(Polygon_2 &p, const float angle);
+
+    kernel_type Polygons_Area( std::vector<Polygon_2> &polygons );
+
     void Rotate_Polygon_degree(Polygon_2 &p, const float angle);
 
     void Translate_Polygon( Polygon_2 &p, const Vector_2 Movement);

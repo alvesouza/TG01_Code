@@ -83,7 +83,7 @@ void Test_Square_Genetics_V01(){
             1000, polygons.size());
 
     std::cout << "flag02\n";
-    Genetic::geneticReturn values = Genetic::Genetic_Algo_V01<Genes_helpers::bit_parser_l1>(polygons,genes, 10000);
+    Genetic::geneticReturn values = Genetic::Genetic_Algo_V01<Genes_helpers::bit_parser_l1>(polygons,genes, 10000, 1, 1);
 
     std::cout << "flag03\n";
     std::vector<Polygon_2> polygons_end = Genetic::Input_State_2_Vec_Polygon(polygons, values.values);
@@ -124,7 +124,7 @@ void Test_Square_Genetics_V02(){
             1000, polygons.size());
 
     std::cout << "flag02\n";
-    Genetic::geneticReturn values = Genetic::Genetic_Algo_V02<Genes_helpers::bit_parser_l1>(polygons,genes, 1000000);
+    Genetic::geneticReturn values = Genetic::Genetic_Algo_V02<Genes_helpers::bit_parser_l1>(polygons,genes, 1000000, 1, 1);
 
     std::cout << "flag03\n";
     std::vector<Polygon_2> polygons_end = Genetic::Input_State_2_Vec_Polygon(polygons, values.values);
@@ -167,7 +167,7 @@ void Test_Square_Genetics_V03(){
             1000, polygons.size());
 
     std::cout << "flag02\n";
-    Genetic::geneticReturn values = Genetic::Genetic_Algo_V02<Genes_helpers::bit_parser_l1>(polygons,genes, 10000);
+    Genetic::geneticReturn values = Genetic::Genetic_Algo_V02<Genes_helpers::bit_parser_l1>(polygons,genes, 10000, 1, 1);
 
     std::cout << "flag03\n";
     std::vector<Polygon_2> polygons_end = Genetic::Input_State_2_Vec_Polygon(polygons, values.values);
@@ -224,7 +224,7 @@ void Test_Genetic_V04(){
             1000, polygons.size());
 
     std::cout << "flag02\n";
-    Genetic::geneticReturn values = Genetic::Genetic_Algo_V03<Genes_helpers::bit_parser_l1>(polygons,genes, 2000);
+    Genetic::geneticReturn values = Genetic::Genetic_Algo_V03<Genes_helpers::bit_parser_l1>(polygons,genes, 2000, 1, 1);
 
     std::cout << "flag03\n";
     std::vector<Polygon_2> polygons_end = Genetic::Input_State_2_Vec_Polygon(polygons, values.values);
