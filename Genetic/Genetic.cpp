@@ -221,7 +221,19 @@ namespace Genetic {
         std::size_t i = 1;
         std::size_t population_size = genes_population.size();
         for (std::size_t size_vector = genes_population.size(); i < size_vector; ++i) {
-            if ( rand()%100 < 50 && i + 1 < size_vector ) {
+            if( rand()%100 < 50 ) {
+                switch (version_mutation) {
+                    case 1:
+                        Genes_helpers::mutation(genes_population[i], 5000);
+                        break;
+                    case 2:
+                        Genes_helpers::mutationV02<T>( genes_population[i], 10000);
+                        break;
+                    case 3:
+                        Genes_helpers::mutationV03<T>( genes_population[i], 5000, 10000);
+                        break;
+                }
+            }else if ( rand()%100 < 70 && i + 1 < size_vector ) {
                 switch (version_cross) {
                     case 1:
                         Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
@@ -233,20 +245,7 @@ namespace Genetic {
                         Genes_helpers::crossV03<T>( genes_population[i], genes_population[i + 1], 10000 );
                         break;
                 }
-                Genes_helpers::crossV02<T>(genes_population[i], genes_population[i + 1]);
                 i++;
-            }else if( rand()%100 < 95 ) {
-                switch (version_mutation) {
-                    case 1:
-                        Genes_helpers::mutation(genes_population[i], 10000);
-                        break;
-                    case 2:
-                        Genes_helpers::mutationV02<T>( genes_population[i], 10000);
-                        break;
-                    case 3:
-                        Genes_helpers::mutationV03<T>( genes_population[i], 20000, 10000);
-                        break;
-                }
             }
         }
     }
@@ -260,64 +259,76 @@ namespace Genetic {
         std::size_t i = 1;
         std::size_t population_size = genes_population.size();
         for (std::size_t size_vector = 0.15*genes_population.size(); i < size_vector; ++i) {
-            if ( rand()%100 < 75 && i + 1 < size_vector ) {
-                switch (version_cross) {
-                    case 1:
-                        Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
-                        break;
-                    case 2:
-                        Genes_helpers::crossV02<T>(genes_population[i], genes_population[i + 1]);
-                        break;
-                    case 3:
-                        Genes_helpers::crossV03<T>( genes_population[i], genes_population[i + 1], 10000 );
-                        break;
-                }
-                i++;
-            }else if ( rand()%100 < 50 ) {
+            if ( rand()%100 < 50 ) {
                 switch (version_mutation) {
                     case 1:
-                        Genes_helpers::mutation(genes_population[i], 10000);
+                        Genes_helpers::mutation(genes_population[i], 1000);
                         break;
                     case 2:
-                        Genes_helpers::mutationV02<T>( genes_population[i], 10000);
-                        break;
-                    case 3:
-                        Genes_helpers::mutationV03<T>( genes_population[i], 10000, 10000);
-                        break;
-                }
-            }
-        }
-        for (std::size_t size_vector = 0.2*genes_population.size(); i < size_vector; ++i) {
-            if ( rand()%100 < 75 && i + 1 < size_vector ) {
-                switch (version_cross) {
-                    case 1:
-                        Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
-                        break;
-                    case 2:
-                        Genes_helpers::crossV02<T>(genes_population[i], genes_population[i + 1]);
-                        break;
-                    case 3:
-                        Genes_helpers::crossV03<T>( genes_population[i], genes_population[i + 1], 10000 );
-                        break;
-                }
-                i++;
-            }else if ( rand()%100 < 50 ) {
-                switch (version_mutation) {
-                    case 1:
-                        Genes_helpers::mutation(genes_population[i], 10000);
-                        break;
-                    case 2:
-                        Genes_helpers::mutationV02<T>( genes_population[i], 10000);
+                        Genes_helpers::mutationV02<T>( genes_population[i], 2000);
                         break;
                     case 3:
                         Genes_helpers::mutationV03<T>( genes_population[i], 3000, 10000);
                         break;
                 }
+            }else if ( rand()%100 < 70 && i + 1 < size_vector ) {
+                switch (version_cross) {
+                    case 1:
+                        Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
+                        break;
+                    case 2:
+                        Genes_helpers::crossV02<T>(genes_population[i], genes_population[i + 1]);
+                        break;
+                    case 3:
+                        Genes_helpers::crossV03<T>( genes_population[i], genes_population[i + 1], 10000 );
+                        break;
+                }
+                i++;
+            }
+        }
+        for (std::size_t size_vector = 0.2*genes_population.size(); i < size_vector; ++i) {
+            if ( rand()%100 < 50 ) {
+                switch (version_mutation) {
+                    case 1:
+                        Genes_helpers::mutation(genes_population[i], 2000);
+                        break;
+                    case 2:
+                        Genes_helpers::mutationV02<T>( genes_population[i], 4000);
+                        break;
+                    case 3:
+                        Genes_helpers::mutationV03<T>( genes_population[i], 5000, 10000);
+                        break;
+                }
+            }else if ( rand()%100 < 75 && i + 1 < size_vector ) {
+                switch (version_cross) {
+                    case 1:
+                        Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
+                        break;
+                    case 2:
+                        Genes_helpers::crossV02<T>(genes_population[i], genes_population[i + 1]);
+                        break;
+                    case 3:
+                        Genes_helpers::crossV03<T>( genes_population[i], genes_population[i + 1], 10000 );
+                        break;
+                }
+                i++;
             }
         }
 
         for (std::size_t size_vector = 0.5*genes_population.size(); i < size_vector; ++i) {
-            if ( rand()%100 < 10 && i + 1 < size_vector ) {
+            if ( rand()%100 < 50 ) {
+                switch (version_mutation) {
+                    case 1:
+                        Genes_helpers::mutation(genes_population[i], 4000);
+                        break;
+                    case 2:
+                        Genes_helpers::mutationV02<T>( genes_population[i], 8000);
+                        break;
+                    case 3:
+                        Genes_helpers::mutationV03<T>( genes_population[i], 10000, 10000);
+                        break;
+                }
+            }else if ( rand()%100 < 60 && i + 1 < size_vector ) {
                 switch (version_cross) {
                     case 1:
                         Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
@@ -330,23 +341,23 @@ namespace Genetic {
                         break;
                 }
                 i++;
-            }else if ( rand()%100 < 95 ) {
-                switch (version_mutation) {
-                    case 1:
-                        Genes_helpers::mutation(genes_population[i], 15000);
-                        break;
-                    case 2:
-                        Genes_helpers::mutationV02<T>( genes_population[i], 15000);
-                        break;
-                    case 3:
-                        Genes_helpers::mutationV03<T>( genes_population[i], 10000, 30000);
-                        break;
-                }
             }
         }
 
         for (std::size_t size_vector = 0.75*genes_population.size(); i < size_vector; ++i) {
-            if ( rand()%100 < 80 && i + 1 < size_vector ) {
+            if ( rand()%100 < 50 ) {
+                switch (version_mutation) {
+                    case 1:
+                        Genes_helpers::mutation(genes_population[i], 6000);
+                        break;
+                    case 2:
+                        Genes_helpers::mutationV02<T>( genes_population[i], 12000);
+                        break;
+                    case 3:
+                        Genes_helpers::mutationV03<T>( genes_population[i], 15000, 10000);
+                        break;
+                }
+            }else if ( rand()%100 < 80 && i + 1 < size_vector ) {
                 switch (version_cross) {
                     case 1:
                         Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
@@ -359,24 +370,23 @@ namespace Genetic {
                         break;
                 }
                 i++;
-            }else if ( rand()%100 < 80 ) {
-                switch (version_mutation) {
-                    case 1:
-                        Genes_helpers::mutation(genes_population[i], 25000);
-                        break;
-                    case 2:
-                        Genes_helpers::mutationV02<T>( genes_population[i], 25000);
-                        break;
-                    case 3:
-                        Genes_helpers::mutationV03<T>( genes_population[i], 20000, 40000);
-                        break;
-                }
-
             }
         }
 
         for (std::size_t size_vector = genes_population.size(); i < size_vector; ++i) {
-            if ( rand()%100 < 90 && i + 1 < size_vector ) {
+            if ( rand()%100 < 50 ) {
+                switch (version_mutation) {
+                    case 1:
+                        Genes_helpers::mutation(genes_population[i], 10000);
+                        break;
+                    case 2:
+                        Genes_helpers::mutationV02<T>( genes_population[i], 20000);
+                        break;
+                    case 3:
+                        Genes_helpers::mutationV03<T>( genes_population[i], 30000, 10000);
+                        break;
+                }
+            }else if ( rand()%100 < 90 && i + 1 < size_vector ) {
                 switch (version_cross) {
                     case 1:
                         Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
@@ -389,18 +399,6 @@ namespace Genetic {
                         break;
                 }
                 i++;
-            }else if ( 1 ) {
-                switch (version_mutation) {
-                    case 1:
-                        Genes_helpers::mutation(genes_population[i], 30000);
-                        break;
-                    case 2:
-                        Genes_helpers::mutationV02<T>( genes_population[i], 40000);
-                        break;
-                    case 3:
-                        Genes_helpers::mutationV03<T>( genes_population[i], 50000, 10000);
-                        break;
-                }
             }
         }
     }
@@ -414,7 +412,19 @@ namespace Genetic {
         std::size_t i = 0.05*genes_population.size();
 
         for (std::size_t size_vector = 0.25*genes_population.size(); i < size_vector; ++i) {
-            if ( rand()%100 < 50 && i + 1 < size_vector ) {
+            if ( rand()%100 < 50 ) {
+                switch (version_mutation) {
+                    case 1:
+                        Genes_helpers::mutation(genes_population[i], 1000);
+                        break;
+                    case 2:
+                        Genes_helpers::mutationV02<T>( genes_population[i], 2000);
+                        break;
+                    case 3:
+                        Genes_helpers::mutationV03<T>( genes_population[i], 3000, 10000);
+                        break;
+                }
+            }else if ( rand()%100 < 50 && i + 1 < size_vector ) {
                 switch (version_cross) {
                     case 1:
                         Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
@@ -427,23 +437,23 @@ namespace Genetic {
                         break;
                 }
                 i++;
-            }else if ( 1 ) {
-                switch (version_mutation) {
-                    case 1:
-                        Genes_helpers::mutation(genes_population[i], 10000);
-                        break;
-                    case 2:
-                        Genes_helpers::mutationV02<T>( genes_population[i], 10000);
-                        break;
-                    case 3:
-                        Genes_helpers::mutationV03<T>( genes_population[i], 20000, 10000);
-                        break;
-                }
             }
         }
 
         for (std::size_t size_vector = 0.50*genes_population.size(); i < size_vector; ++i) {
-            if ( rand()%100 < 50 && i + 1 < size_vector ) {
+            if ( rand()%100 < 50 ) {
+                switch (version_mutation) {
+                    case 1:
+                        Genes_helpers::mutation(genes_population[i], 2000);
+                        break;
+                    case 2:
+                        Genes_helpers::mutationV02<T>( genes_population[i], 4000);
+                        break;
+                    case 3:
+                        Genes_helpers::mutationV03<T>( genes_population[i], 5000, 10000);
+                        break;
+                }
+            }else if ( rand()%100 < 60 && i + 1 < size_vector ) {
                 switch (version_cross) {
                     case 1:
                         Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
@@ -456,23 +466,23 @@ namespace Genetic {
                         break;
                 }
                 i++;
-            }else if ( 1 ) {
-                switch (version_mutation) {
-                    case 1:
-                        Genes_helpers::mutation(genes_population[i], 10000);
-                        break;
-                    case 2:
-                        Genes_helpers::mutationV02<T>( genes_population[i], 10000);
-                        break;
-                    case 3:
-                        Genes_helpers::mutationV03<T>( genes_population[i], 40000, 10000);
-                        break;
-                }
             }
         }
 
         for (std::size_t size_vector = 0.75*genes_population.size(); i < size_vector; ++i) {
-            if ( rand()%100 < 10 && i + 1 < size_vector ) {
+            if ( rand()%100 < 50 ) {
+                switch (version_mutation) {
+                    case 1:
+                        Genes_helpers::mutation(genes_population[i], 4000);
+                        break;
+                    case 2:
+                        Genes_helpers::mutationV02<T>( genes_population[i], 8000);
+                        break;
+                    case 3:
+                        Genes_helpers::mutationV03<T>( genes_population[i], 10000, 10000);
+                        break;
+                }
+            }else if ( rand()%100 < 60 && i + 1 < size_vector ) {
                 switch (version_cross) {
                     case 1:
                         Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
@@ -485,36 +495,11 @@ namespace Genetic {
                         break;
                 }
                 i++;
-            }else if ( rand()%100 < 90 ) {
-                switch (version_mutation) {
-                    case 1:
-                        Genes_helpers::mutation(genes_population[i], 10000);
-                        break;
-                    case 2:
-                        Genes_helpers::mutationV02<T>( genes_population[i], 40000);
-                        break;
-                    case 3:
-                        Genes_helpers::mutationV03<T>( genes_population[i], 30000, 30000);
-                        break;
-                }
             }
         }
 
         for (std::size_t size_vector = genes_population.size(); i < size_vector; ++i) {
-            if ( rand()%100 < 70 && i + 1 < size_vector ) {
-                switch (version_cross) {
-                    case 1:
-                        Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
-                        break;
-                    case 2:
-                        Genes_helpers::crossV02<T>(genes_population[i], genes_population[i + 1]);
-                        break;
-                    case 3:
-                        Genes_helpers::crossV03<T>( genes_population[i], genes_population[i + 1], 10000 );
-                        break;
-                }
-                i++;
-            }else if ( 1 ) {
+            if ( rand()%100 < 50 ) {
                 switch (version_mutation) {
                     case 1:
                         Genes_helpers::mutation(genes_population[i], 10000);
@@ -523,9 +508,22 @@ namespace Genetic {
                         Genes_helpers::mutationV02<T>( genes_population[i], 20000);
                         break;
                     case 3:
-                        Genes_helpers::mutationV03<T>( genes_population[i], 3000, 50000);
+                        Genes_helpers::mutationV03<T>( genes_population[i], 30000, 10000);
                         break;
                 }
+            }else if ( rand()%100 < 80 && i + 1 < size_vector ) {
+                switch (version_cross) {
+                    case 1:
+                        Genes_helpers::cross(genes_population[i], genes_population[i + 1]);
+                        break;
+                    case 2:
+                        Genes_helpers::crossV02<T>(genes_population[i], genes_population[i + 1]);
+                        break;
+                    case 3:
+                        Genes_helpers::crossV03<T>( genes_population[i], genes_population[i + 1], 10000 );
+                        break;
+                }
+                i++;
             }
         }
     }
