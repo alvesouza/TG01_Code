@@ -17,13 +17,13 @@ def Rotate2ShorterstHeight( objs ):
                 s = obj.Shape
                 p = obj.Placement
                 b = p.Base
-                r = p.Rotation
                 faces = s.Faces
-                '''print(dir(faces[0]))'''
                 size_list = len(faces)
                 print("len = ", len(faces), "obj.Label = ", obj.Label)
                 best_face = -1
                 smallest_height = 9999999
+
+                #Look through object faces, looking for the one which on the bottom would gives us the shortest height
                 for i in range( size_list ):
                     height = -1
                     for j in range( size_list ):
@@ -39,14 +39,28 @@ def Rotate2ShorterstHeight( objs ):
                         best_face = i
 
                 '''print( "best_face = {0}, smallest_height = {1}".format(best_face, smallest_height) )'''
+
+                #Find Axis and angle to rotate
                 uv = faces[ best_face ].Surface.parameter(faces[ best_face ].CenterOfMass)
                 faceNormalInCOM = faces[ best_face ].normalAt(uv[0], uv[1])
-                #print("dir face = {0}".format( dir( faces[ best_face ] )))
-                '''print( "Faces Normal = {0}".format(faceNormalInCOM) )'''
-                center_mass = faces[best_face].CenterOfMass
                 angle = acos( -faceNormalInCOM[2] )*180/(pi)
+
+                # Make rotaion, so that face is on the bottom, and orthogonal to XY
                 spin = makeRotatingPlacement(App.Vector(b[0], b[1], b[2]), App.Vector(-faceNormalInCOM[1], faceNormalInCOM[0], 0), angle)
                 obj.Placement = spin.multiply(obj.Placement)
+
+                #After rotation, sets find lowest high and sets it on zero
+                s = obj.Shape
+                p = obj.Placement
+                b = p.Base
+                r = p.Rotation
+                lowest_height = 9999999
+                for vertex in s.Vertexes:
+                    Point = vertex.Point
+                    if lowest_height > Point[2]:
+                        lowest_height = Point[2]
+
+                obj.Placement = App.Placement(App.Vector(b[0], b[1], b[2] - lowest_height), r)
 
 def LowestHeightOnZero( objs ):
     for obj in objs:
@@ -72,12 +86,29 @@ def LowestHeightOnZero( objs ):
                         highest_x = Point[0]
                     if highest_y < Point[1]:
                         highest_y = Point[1]
-                #obj.Placement = App.Placement(App.Vector(b[0], b[1], b[2] - lowest_height), r)
-                #obj.Placement = App.Placement(App.Vector(b[0], b[1], b[2] - lowest_height), r)
-                print( "Label = ", obj.Label )
+
                 obj.Placement = App.Placement(App.Vector( b[0]-highest_x, b[1]-highest_y, b[2] - lowest_height), r)
 
-def GetPositionsValues( objs ):
+def Initial_Position( objs ):
+    for obj in objs:
+        if 'Shape' in dir(obj):
+            if str(type(obj)) == "<class 'PartDesign.Body'>" and obj.Label != "Board Body":
+                s = obj.Shape
+                p = obj.Placement
+                b = p.Base
+                r = p.Rotation
+                highest_x = -9999999
+                highest_y = -9999999
+                for vertex in s.Vertexes:
+                    Point = vertex.Point
+                    if highest_x < Point[0]:
+                        highest_x = Point[0]
+                    if highest_y < Point[1]:
+                        highest_y = Point[1]
+
+                obj.Placement = App.Placement(App.Vector( b[0]-highest_x, b[1]-highest_y, b[2], r) )
+
+def getPositionsValues(objs):
     vertexesAll = []
     positions = []
     CadData = []
@@ -166,15 +197,15 @@ if __name__ == '__main__':
     positions_obj = []
     quaternions_obj = []
 
-    vertex_board = GetBoard( objs )
+    #vertex_board = GetBoard( objs )
 
-    print( vertex_board )
+    #print( vertex_board )
 
     Rotate2ShorterstHeight(objs)
-    LowestHeightOnZero(objs)
-    values = GetPositionsValues(objs)
+    #LowestHeightOnZero(objs)
+    #values = GetPositionsValues(objs)
 
-    WriteValues( values )
+    #WriteValues( values )
     #new_values = TG01_Code.GeneticAlgoV01_parser01( 1, 1000,1000, values[0], values[1] )
     #new_values = TG01_Code.GeneticAlgo_knolling_V01_parser01( 1, 1000, 1000, values[0], values[1], [[0,0,0]], vertex_board, 3, 3)
 

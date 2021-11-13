@@ -2,6 +2,7 @@ TG01_CodePATH = '/home/pedro/Documents/gits/github/TG01_Code'
 import sys
 import csv
 from math import acos, pi
+import os
 
 sys.path.append(TG01_CodePATH)
 import TG01_Code
@@ -1256,8 +1257,38 @@ def Get_Model_Non_Board(model):
     else:
         return Models_00()
 
+def FileName( model, algo_version, cross_version, mutation_version):
+    type = "Variant"
+    try:
+        os.mkdir("Data")
+    except OSError as e:
+        print(e)
 
+    try:
+        os.mkdir("Data/{0}".format( type ) )
+    except OSError as e:
+        print(e)
+
+    try:
+        os.mkdir("Data/{0}/Algo_{1}".format( type, algo_version ) )
+    except OSError as e:
+        print(e)
+
+    try:
+        os.mkdir("Data/{0}/Algo_{1}/Cross_{2}".format( type, algo_version, cross_version ) )
+    except OSError as e:
+        print(e)
+
+    try:
+        os.mkdir("Data/{0}/Algo_{1}/Cross_{2}/Mutation_{3}".format( type, algo_version, cross_version, mutation_version ) )
+    except OSError as e:
+        print(e)
+
+    return 'Data/{0}/Algo_{2}/Cross_{3}/Mutation_{4}/Data_model_{1}_algo{2}_cross{3}_mutation{4}.csv'.format( type, model, algo_version, cross_version,
+                                                                       mutation_version)
 if __name__ == '__main__':
+    os.nice(-19)
+    print( 'os.environ.get("Cad") = ', os.environ.get("Cad"))
     print( "Teste_FreeCad.py {0} {1} {2} {3}".format(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]) )
     vertex_board = [[0.0, 0.0, 0], [162.987976, 0.0, 0], [208.596848, 45.861645, 0], [283.270172, 52.121681, 0],
                     [243.027069, 144.233688, 0], [93.68040499999998, 159.436646, 0],
@@ -1270,7 +1301,7 @@ if __name__ == '__main__':
 
     values = Get_Model_Non_Board(model)
     # WriteValues(values)
-    new_values = TG01_Code.GeneticAlgoV01_parser01( algo_version, 1000, 10000, values[0], values[1], cross_version, mutation_version )
+    new_values = TG01_Code.GeneticAlgoV01_parser01( algo_version, 2000, 50000, values[0], values[1], cross_version, mutation_version )
     #new_values = TG01_Code.GeneticAlgoV01_parser01( algo_version, 1000, 10000, values[0], values[1], cross_version, mutation_version )
     # new_values = TG01_Code.GeneticAlgoV01_parser01( algo_version, 100, 100, values[0], values[1], cross_version, mutation_version )
     # new_values = TG01_Code.GeneticAlgo_knolling_V01_parser01(1, 100000, 10000, values[0], values[1], [[0, 0, 0]], vertex_board, cross_version, mutation_version)
@@ -1295,8 +1326,7 @@ if __name__ == '__main__':
     scores_Fianl = new_values[5]
     times = new_values[6]
     generation = new_values[7]
-    with open('Data/Variant/Data_model_{0}_algo{1}_cross{2}_mutation{3}.csv'.format(model, algo_version, cross_version,
-                                                                       mutation_version), 'w', newline='') as csvfile:
+    with open(FileName( model, algo_version, cross_version, mutation_version), 'w', newline='') as csvfile:
         fieldnames = ['Generation', 'Time', 'Area', 'Score', 'Score_Final', 'Area_Total', 'Board_Area',
                       'Number of Objects', 'Positions']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=";")

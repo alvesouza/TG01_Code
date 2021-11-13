@@ -31,15 +31,48 @@ namespace Genes_helpers {
         const std::size_t object_size = sizeof(T)*8;
         boost::dynamic_bitset<>::size_type number_objects = a.size()/object_size;
         for (boost::dynamic_bitset<>::size_type i = 0; i < a.size(); i += object_size) {
-            if( rand() % 100000 < object_rate )
-                for (boost::dynamic_bitset<>::size_type j = 0; i + j < a.size() && j < object_size ; j++){
-                    a[i+j] ^= (rand()%100000 < rate);
+            if( rand() % 100000 < object_rate ) {
+                for (boost::dynamic_bitset<>::size_type j = 0; i + j < a.size() && j < object_size; j++) {
+                    if (rand() % 100000 < rate) {
+                        //if(  a[i + j] == 1 )printf( "equal to 1\n" );
+                        //printf( "a[ %ld ] = ", i+j );
+                        //std::cout << a[i + j] <<std::endl;
+                        a[i + j] ^= 1;
+                        //printf( "a[ %ld ] = ", i+j );
+                        //std::cout << a[i + j] <<std::endl;
+                        //printf("%ld ", i + j);
+                    }
                 }
+                //printf("\n");
+            }
         }
     }
 
     template void mutationV03<bit_parser_l1>(boost::dynamic_bitset<> &a, const uint rate = 10000, const uint object_rate = 10000 );
     template void mutationV03<bit_parser_l3>(boost::dynamic_bitset<> &a, const uint rate = 10000, const uint object_rate = 10000 );
+
+    template<class T>
+    void mutationV04(boost::dynamic_bitset<> &a, const uint rate ){
+        const std::size_t object_size = sizeof(T)*8;
+        boost::dynamic_bitset<>::size_type number_objects = a.size()/object_size;
+        const boost::dynamic_bitset<>::size_type i = (rand()%number_objects)*object_size;
+
+        for (boost::dynamic_bitset<>::size_type j = 0; i + j < a.size() && j < object_size; j++) {
+            if (rand() % 100000 < rate) {
+                //if(  a[i + j] == 1 )printf( "equal to 1\n" );
+                //printf( "a[ %ld ] = ", i+j );
+                //std::cout << a[i + j] <<std::endl;
+                a[i + j] ^= 1;
+                //printf( "a[ %ld ] = ", i+j );
+                //std::cout << a[i + j] <<std::endl;
+                //printf("%ld ", i + j);
+            }
+        }
+                //printf("\n");
+    }
+
+    template void mutationV04<bit_parser_l1>(boost::dynamic_bitset<> &a, const uint rate = 10000 );
+    template void mutationV04<bit_parser_l3>(boost::dynamic_bitset<> &a, const uint rate = 10000 );
 
     State Convert_Bits( bit_parser_l3 *bits ){
         State value;
@@ -53,11 +86,11 @@ namespace Genes_helpers {
     State Convert_Bits( bit_parser_l1 *bits ){
         State value;
         uint val = bits->value;
-        value.Position[0] = ((val&16383)%10000)/10.0f;//14bits
-        val = val >> 14;
-        value.Position[1] = ((val&16383)%10000)/10.0f;
-        val = val >> 14;//now last 4 bits
-        value.angle = val*24;
+        value.Position[0] = ((2*(val&8191))%10000)/10.0f;//((val&16383)%10000)/10.0f;//14bits
+        val = val >> 13;//14;
+        value.Position[1] = ((2*(val&8191))%10000)/10.0f;
+        val = val >> 13;//14;//now last 4 bits
+        value.angle = val*6;//0;//val*24;
 
         return value;
     }
@@ -65,11 +98,11 @@ namespace Genes_helpers {
     State Convert_Bits_V02( bit_parser_l1 *bits, CGAL_helpers::Rect_info *rect ){
         State value;
         uint val = bits->value;
-        value.Position[0] = (((val&16383)%10000)/10000.0f)*(rect->x_max);//14bits
-        val = val >> 14;
-        value.Position[1] = (((val&16383)%10000)/10000.0f)*(rect->y_max);
-        val = val >> 14;//now last 4 bits
-        value.angle = val*24;
+        value.Position[0] = (((2*(val&8191))%10001)/10000.0f)*(rect->x_max);;//(((val&16383)%10001)/10000.0f)*(rect->x_max);//14bits
+        val = val >> 13;//14;
+        value.Position[1] = (((2*(val&8191))%10001)/10000.0f)*(rect->x_max);;//(((val&16383)%10001)/10000.0f)*(rect->y_max);
+        val = val >> 13;//14;//now last 4 bits
+        value.angle = val*6;//0;//val*24;
 
         return value;
     }
@@ -120,6 +153,24 @@ namespace Genes_helpers {
 
     template void crossV03<bit_parser_l1>(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b, const uint cross_odds = 10000);
     template void crossV03<bit_parser_l3>(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b, const uint cross_odds = 10000);
+
+    template<class T>
+    void crossV04(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b ){
+        const std::size_t object_size = sizeof(T)*8;
+        boost::dynamic_bitset<>::size_type number_objects = a.size()/object_size;
+        bool aux;
+        const boost::dynamic_bitset<>::size_type i = (rand()%number_objects)*object_size;
+
+        for (boost::dynamic_bitset<>::size_type j = 0; i + j < a.size() && j < object_size ; j++){
+            aux = a[i+j];
+            a[i+j] = b[i+j];
+            b[i+j] = aux;
+        }
+
+    }
+
+    template void crossV04<bit_parser_l1>(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b);
+    template void crossV04<bit_parser_l3>(boost::dynamic_bitset<> &a, boost::dynamic_bitset<> &b);
 
     template void convert_genes<bit_parser_l1>(boost::dynamic_bitset<> &genes, std::vector<State> &Values);
     template void convert_genes<bit_parser_l3>(boost::dynamic_bitset<> &genes, std::vector<State> &Values);

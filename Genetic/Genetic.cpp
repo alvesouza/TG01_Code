@@ -141,17 +141,23 @@ namespace Genetic {
         Score_struct score_aux;
         CGAL_helpers::Rect_info best_rect;
         best_rect = rect;
+        //std::cout << "best_rect.x = " << best_rect.x_max << " best_rect.y = " << best_rect.y_max << " area = " <<best_rect.area << std::endl;
         //std::cout << "Flag02_01" << std::endl;
         for (std::size_t i = 0; i < size_population; ++i) {
             Genes_helpers::convert_genes_V02<Genes_helpers::bit_parser_l1>(genes_population[i], values, &rect);
             poly_aux = Input_State_2_Vec_Polygon(p, values);
 
             score_aux = Score_V02(poly_aux, intersection_weight);
-            if ( change_rect && best_rect.area > score_aux.info.area && score_aux.intersection == 0 && score_aux.score < best_score) {
+            if ( change_rect && score_aux.intersection == 0 && best_rect.x_max > score_aux.info.x_max
+                                           && best_rect.y_max > score_aux.info.y_max){// && score_aux.score < best_score) {
                 best_rect = score_aux.info;
-                best_score = score_aux.score;
+
+                //std::cout << "new////////////////////////\nbest_rect.x = " << best_rect.x_max << " best_rect.y = " << best_rect.y_max << " area = " <<best_rect.area << std::endl;
+                //best_score = score_aux.score;
                 //std::cout << "Flag02_05" << std::endl;
             }
+
+            //if( score_aux.score < best_score )
             scores[i] = score_aux.score;
             //printf("Pop = %ld, scores = %f\n", i, score_aux.score);
             if (num_index < size_best ) {
@@ -232,6 +238,9 @@ namespace Genetic {
                     case 3:
                         Genes_helpers::mutationV03<T>( genes_population[i], 5000, 10000);
                         break;
+                    case 4:
+                        Genes_helpers::mutationV04<T>( genes_population[i], 5000);
+                        break;
                 }
             }else if ( rand()%100 < 70 && i + 1 < size_vector ) {
                 switch (version_cross) {
@@ -243,6 +252,9 @@ namespace Genetic {
                         break;
                     case 3:
                         Genes_helpers::crossV03<T>( genes_population[i], genes_population[i + 1], 10000 );
+                        break;
+                    case 4:
+                        Genes_helpers::crossV04<T>( genes_population[i], genes_population[i + 1] );
                         break;
                 }
                 i++;
@@ -270,6 +282,9 @@ namespace Genetic {
                     case 3:
                         Genes_helpers::mutationV03<T>( genes_population[i], 3000, 10000);
                         break;
+                    case 4:
+                        Genes_helpers::mutationV04<T>( genes_population[i], 3000);
+                        break;
                 }
             }else if ( rand()%100 < 70 && i + 1 < size_vector ) {
                 switch (version_cross) {
@@ -281,6 +296,9 @@ namespace Genetic {
                         break;
                     case 3:
                         Genes_helpers::crossV03<T>( genes_population[i], genes_population[i + 1], 10000 );
+                        break;
+                    case 4:
+                        Genes_helpers::crossV04<T>(genes_population[i], genes_population[i + 1]);
                         break;
                 }
                 i++;
@@ -298,6 +316,9 @@ namespace Genetic {
                     case 3:
                         Genes_helpers::mutationV03<T>( genes_population[i], 5000, 10000);
                         break;
+                    case 4:
+                        Genes_helpers::mutationV04<T>( genes_population[i], 5000);
+                        break;
                 }
             }else if ( rand()%100 < 75 && i + 1 < size_vector ) {
                 switch (version_cross) {
@@ -309,6 +330,9 @@ namespace Genetic {
                         break;
                     case 3:
                         Genes_helpers::crossV03<T>( genes_population[i], genes_population[i + 1], 10000 );
+                        break;
+                    case 4:
+                        Genes_helpers::crossV04<T>(genes_population[i], genes_population[i + 1]);
                         break;
                 }
                 i++;
@@ -327,6 +351,9 @@ namespace Genetic {
                     case 3:
                         Genes_helpers::mutationV03<T>( genes_population[i], 10000, 10000);
                         break;
+                    case 4:
+                        Genes_helpers::mutationV04<T>( genes_population[i], 10000);
+                        break;
                 }
             }else if ( rand()%100 < 60 && i + 1 < size_vector ) {
                 switch (version_cross) {
@@ -338,6 +365,9 @@ namespace Genetic {
                         break;
                     case 3:
                         Genes_helpers::crossV03<T>( genes_population[i], genes_population[i + 1], 10000 );
+                        break;
+                    case 4:
+                        Genes_helpers::crossV04<T>(genes_population[i], genes_population[i + 1]);
                         break;
                 }
                 i++;
@@ -356,6 +386,9 @@ namespace Genetic {
                     case 3:
                         Genes_helpers::mutationV03<T>( genes_population[i], 15000, 10000);
                         break;
+                    case 4:
+                        Genes_helpers::mutationV04<T>( genes_population[i], 15000);
+                        break;
                 }
             }else if ( rand()%100 < 80 && i + 1 < size_vector ) {
                 switch (version_cross) {
@@ -367,6 +400,9 @@ namespace Genetic {
                         break;
                     case 3:
                         Genes_helpers::crossV03<T>( genes_population[i], genes_population[i + 1], 10000 );
+                        break;
+                    case 4:
+                        Genes_helpers::crossV04<T>(genes_population[i], genes_population[i + 1]);
                         break;
                 }
                 i++;
@@ -385,6 +421,9 @@ namespace Genetic {
                     case 3:
                         Genes_helpers::mutationV03<T>( genes_population[i], 30000, 10000);
                         break;
+                    case 4:
+                        Genes_helpers::mutationV04<T>( genes_population[i], 30000);
+                        break;
                 }
             }else if ( rand()%100 < 90 && i + 1 < size_vector ) {
                 switch (version_cross) {
@@ -396,6 +435,9 @@ namespace Genetic {
                         break;
                     case 3:
                         Genes_helpers::crossV03<T>( genes_population[i], genes_population[i + 1], 10000 );
+                        break;
+                    case 4:
+                        Genes_helpers::crossV04<T>(genes_population[i], genes_population[i + 1]);
                         break;
                 }
                 i++;
@@ -423,6 +465,9 @@ namespace Genetic {
                     case 3:
                         Genes_helpers::mutationV03<T>( genes_population[i], 3000, 10000);
                         break;
+                    case 4:
+                        Genes_helpers::mutationV04<T>( genes_population[i], 3000);
+                        break;
                 }
             }else if ( rand()%100 < 50 && i + 1 < size_vector ) {
                 switch (version_cross) {
@@ -434,6 +479,9 @@ namespace Genetic {
                         break;
                     case 3:
                         Genes_helpers::crossV03<T>( genes_population[i], genes_population[i + 1], 10000 );
+                        break;
+                    case 4:
+                        Genes_helpers::crossV04<T>(genes_population[i], genes_population[i + 1]);
                         break;
                 }
                 i++;
@@ -452,6 +500,9 @@ namespace Genetic {
                     case 3:
                         Genes_helpers::mutationV03<T>( genes_population[i], 5000, 10000);
                         break;
+                    case 4:
+                        Genes_helpers::mutationV04<T>( genes_population[i], 5000);
+                        break;
                 }
             }else if ( rand()%100 < 60 && i + 1 < size_vector ) {
                 switch (version_cross) {
@@ -463,6 +514,9 @@ namespace Genetic {
                         break;
                     case 3:
                         Genes_helpers::crossV03<T>( genes_population[i], genes_population[i + 1], 10000 );
+                        break;
+                    case 4:
+                        Genes_helpers::crossV04<T>(genes_population[i], genes_population[i + 1]);
                         break;
                 }
                 i++;
@@ -481,6 +535,9 @@ namespace Genetic {
                     case 3:
                         Genes_helpers::mutationV03<T>( genes_population[i], 10000, 10000);
                         break;
+                    case 4:
+                        Genes_helpers::mutationV04<T>( genes_population[i], 10000);
+                        break;
                 }
             }else if ( rand()%100 < 60 && i + 1 < size_vector ) {
                 switch (version_cross) {
@@ -492,6 +549,9 @@ namespace Genetic {
                         break;
                     case 3:
                         Genes_helpers::crossV03<T>( genes_population[i], genes_population[i + 1], 10000 );
+                        break;
+                    case 4:
+                        Genes_helpers::crossV04<T>(genes_population[i], genes_population[i + 1]);
                         break;
                 }
                 i++;
@@ -510,6 +570,9 @@ namespace Genetic {
                     case 3:
                         Genes_helpers::mutationV03<T>( genes_population[i], 30000, 10000);
                         break;
+                    case 4:
+                        Genes_helpers::mutationV04<T>( genes_population[i], 30000);
+                        break;
                 }
             }else if ( rand()%100 < 80 && i + 1 < size_vector ) {
                 switch (version_cross) {
@@ -521,6 +584,9 @@ namespace Genetic {
                         break;
                     case 3:
                         Genes_helpers::crossV03<T>( genes_population[i], genes_population[i + 1], 10000 );
+                        break;
+                    case 4:
+                        Genes_helpers::crossV04<T>(genes_population[i], genes_population[i + 1]);
                         break;
                 }
                 i++;
@@ -662,16 +728,17 @@ namespace Genetic {
         float intersection_weight_max = std::numeric_limits<float>::max();
         std::clock_t start;
         results.total_area = CGAL_helpers::Polygons_Area( p );
-
+        const kernel_type intersection_points = 0.1 * results.total_area;
         for (std::size_t i = 0; i < generations; ++i) {
             printf( "generation %ld\n", i );
-            if ( i < 0.20*generations )
-                best_index = Generation_Algo_V01(p, genes_population, values, scores, (4000.0*(i+1))/generations );
-            else if ( i < 0.75*generations )
-                best_index = Generation_Algo_V01(p, genes_population, values, scores, (40000.0*(i+1))/generations );
+            if ( i < 0.75*generations )
+                best_index = Generation_Algo_V01(p, genes_population, values, scores, intersection_points );//(20000.0*(i+1))/generations );
+            else if ( i < 0.85*generations )
+                best_index = Generation_Algo_V01(p, genes_population, values, scores, 5 * intersection_points );//(40000.0*(i+1))/generations );
             else
                 best_index = Generation_Algo_V01(p, genes_population, values, scores, intersection_weight_max);
-            if( i % 10 == 0 || i == (generations - 1) ) {
+            //std::cout << genes_population[best_index] << std::endl;
+            if( i % 2 == 0 || i == (generations - 1) ) {
                 results.index.push_back(i+1);
                 results.scores.push_back(scores[best_index]);
                 polygons_aux = Input_State_2_Vec_Polygon(p, values);
@@ -717,16 +784,17 @@ namespace Genetic {
         float intersection_weight_max = std::numeric_limits<float>::max();
         std::clock_t start;
         results.total_area = CGAL_helpers::Polygons_Area( p );
-
+        const kernel_type intersection_points = 0.3 * results.total_area;
         for (std::size_t i = 0; i < generations; ++i) {
             printf( "generation %ld\n", i );
-            if ( i < 0.20*generations )
-                best_index = Generation_Algo_V01(p, genes_population, values, scores, (4000.0*(i+1))/generations );
-            else if ( i < 0.75*generations )
-                best_index = Generation_Algo_V01(p, genes_population, values, scores, (40000.0*(i+1))/generations );
+            if ( i < 0.75*generations )
+                best_index = Generation_Algo_V01(p, genes_population, values, scores, intersection_points );//(20000.0*(i+1))/generations );
+            else if ( i < 0.85*generations )
+                best_index = Generation_Algo_V01(p, genes_population, values, scores, 5*intersection_points );//(40000.0*(i+1))/generations );
             else
                 best_index = Generation_Algo_V01(p, genes_population, values, scores, intersection_weight_max);
-            if( i % 10 == 0 || i == (generations - 1) ) {
+            //std::cout << genes_population[best_index] << std::endl;
+            if( i % 2 == 0 || i == (generations - 1) ) {
                 results.index.push_back(i+1);
                 results.scores.push_back(scores[best_index]);
                 polygons_aux = Input_State_2_Vec_Polygon(p, values);
@@ -771,16 +839,19 @@ namespace Genetic {
         std::clock_t start;
         std::vector<Polygon_2> polygons_aux;
         results.total_area = CGAL_helpers::Polygons_Area( p );
+        const kernel_type intersection_points = 0.3 * results.total_area;
+
         for (std::size_t i = 0; i < generations; ++i) {
             printf( "Generation %ld\n", i );
-            if ( i < 0.20*generations )
-                best_indexes = Generation_Algo_V02(p, genes_population, values, scores, (4000.0*(i+1))/generations );
-            else if ( i < 0.75*generations )
-                best_indexes = Generation_Algo_V02(p, genes_population, values, scores, (40000.0*(i+1))/generations);
+            if ( i < 0.75*generations )
+                best_indexes = Generation_Algo_V02(p, genes_population, values, scores, intersection_points );//(20000.0*(i+1))/generations );
+            else if ( i < 0.85*generations )
+                best_indexes = Generation_Algo_V02(p, genes_population, values, scores, 5*intersection_points );//(40000.0*(i+1))/generations);
             else
                 best_indexes = Generation_Algo_V02(p, genes_population, values, scores, std::numeric_limits<float>::max());
 
-            if( i % 10 == 0 || i == (generations - 1) ) {
+            //std::cout << genes_population[best_indexes[0]] << std::endl;
+            if( i % 2 == 0 || i == (generations - 1) ) {
                 results.index.push_back(i+1);
                 results.scores.push_back(scores[best_indexes[0]]);
                 polygons_aux = Input_State_2_Vec_Polygon(p, values);
@@ -822,27 +893,30 @@ namespace Genetic {
         std::vector<float> scores(size_population);
         Score_struct score_aux;
         float best_score = std::numeric_limits<float>::max();
-        CGAL_helpers::Rect_info best_rect = {
-                500,
-                500,
-                500*500};
         Generation_Algo_V03_struct info;
-        kernel_type area_aux;
-        results.total_area = CGAL_helpers::Polygons_Area( p );
+        kernel_type area_aux = CGAL_helpers::Polygons_Area( p );
+        results.total_area = area_aux;
+        area_aux *= 4;
+        CGAL_helpers::Rect_info best_rect = {
+                sqrt(area_aux),
+                sqrt(area_aux),
+                area_aux};
+        const kernel_type intersection_points = 0.3 * results.total_area;
         float intersection_weight_max = std::numeric_limits<float>::max();
         std::clock_t start;
         std::vector<Polygon_2> polygons_aux;
         for (std::size_t i = 0; i < generations; ++i) {
             printf( "Generation %ld\n", i );
-            if ( i < 0.2*generations )
-                info = Generation_Algo_V03(p, genes_population, values, scores, (4000.0*(i+1))/generations, best_rect, best_score, true);
-            else if ( i < 0.75*generations )
-                info = Generation_Algo_V03(p, genes_population, values, scores, (40000.0*(i+1))/generations, best_rect, best_score, true);
+            if ( i < 0.75*generations )
+                info = Generation_Algo_V03(p, genes_population, values, scores, intersection_points,  best_rect, best_score, true );//(20000.0*(i+1))/generations, best_rect, best_score, true);
+            else if ( i < 0.85*generations )
+                info = Generation_Algo_V03(p, genes_population, values, scores, 5*intersection_points, best_rect, best_score, i < 0.8*generations );//(40000.0*(i+1))/generations, best_rect, best_score, i < 0.8*generations);
             else
                 info = Generation_Algo_V03(p, genes_population, values, scores, std::numeric_limits<float>::max(), best_rect, best_score, i < 0.8*generations);
 
+            //std::cout << genes_population[info.best_indexes[0]] << std::endl;
             best_rect = info.rect;
-            if( i % 10 == 0 || i == (generations - 1) ) {
+            if( i % 2 == 0 || i == (generations - 1) ) {
                 results.index.push_back(i+1);
                 results.scores.push_back(scores[info.best_indexes[0]]);
                 polygons_aux = Input_State_2_Vec_Polygon(p, values);
@@ -896,9 +970,9 @@ namespace Genetic {
         std::clock_t start;
         std::vector<Polygon_2> polygons_aux;
         for (std::size_t i = 0; i < generations; ++i) {
-            if ( i < 0.2*generations )
-                info = Generation_Algo_V03(p, genes_population, values, scores, (4000.0*(i+1))/generations, best_rect, best_score, true);
-            else if ( i < 0.75*generations )
+            if ( i < 0 )//.2*generations )
+                info = Generation_Algo_V03(p, genes_population, values, scores, (20000.0*(i+1))/generations, best_rect, best_score, true);
+            else if ( i < 0 )//.75*generations )
                 info = Generation_Algo_V03(p, genes_population, values, scores, (40000.0*(i+1))/generations, best_rect, best_score, true);
             else
                 info = Generation_Algo_V03(p, genes_population, values, scores, std::numeric_limits<float>::max(), best_rect, best_score, i < 0.8*generations);
@@ -985,7 +1059,7 @@ namespace Genetic {
             else
                 best_index = Generation_Algo_knolling_V01(p, board,genes_population, values, scores, intersection_weight_max);
             */
-             if( i % 10 == 0 || i == (generations - 1) ) {
+             if( i % 2 == 0 || i == (generations - 1) ) {
                 results.index.push_back(i+1);
                 results.scores.push_back(scores[best_index]);
                 polygons_aux = Input_State_2_Vec_Polygon(p, values);

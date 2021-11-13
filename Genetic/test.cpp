@@ -253,7 +253,7 @@ void Test_Intersection(){
     //p2 = 4 0 0 10.9215 -14.308 14.896 -11.2743 3.97445 3.03376
 }
 
-int main(){
+/*int main(){
     //Test_Create_Population();
     /*
     int a;
@@ -292,10 +292,39 @@ int main(){
         std::cin >> a;
     }
     */
+    /*
     float angle = 3.14*45/180.0;
     Point_2 p(1,0);
     Transformation rotate(CGAL::ROTATION, sin(angle), cos(angle));
     p = rotate( p );
     printf( "( %f, %f )", p[0], p[1] );
+    return 0;
+}*/
+using namespace std;
+void check_inside(Point_2 pt, Point_2 *pgn_begin, Point_2 *pgn_end)
+{
+    cout << "The point " << pt;
+    switch(CGAL::bounded_side_2(pgn_begin, pgn_end,pt)) {
+        case CGAL::ON_BOUNDED_SIDE :
+            cout << " is inside the polygon.\n";
+            break;
+        case CGAL::ON_BOUNDARY:
+            cout << " is on the polygon boundary.\n";
+            break;
+        case CGAL::ON_UNBOUNDED_SIDE:
+            cout << " is outside the polygon.\n";
+            break;
+    }
+}
+int main()
+{
+    Point_2 points[] = { Point_2(0,0), Point_2(0,1), Point_2(1,1), Point_2(1,0)};
+    // check if the polygon is simple.
+    cout << "The polygon is "
+         << (CGAL::is_simple_2(points, points+4 ) ? "" : "not ")
+         << "simple." << endl;
+    check_inside(Point_2(0.5, 0.5), points, points+4);
+    check_inside(Point_2(1.5, 2.5), points, points+4);
+    check_inside(Point_2(1, 0), points, points+4);
     return 0;
 }

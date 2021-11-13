@@ -227,12 +227,12 @@ namespace CGAL_helpers{
                 if ( x > x_max)
                     x_max = x;
                 else if (x < 0)
-                    return {9999999, 9999999, 9999999};
+                    return {std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max()};
 
                 if ( y > y_max)
                     y_max = y;
                 else if (y < 0)
-                    return {9999999, 9999999, 9999999};
+                    return {std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max()};
             }
         }
 
