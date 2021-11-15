@@ -8,7 +8,7 @@
 namespace Genetic {
     template <class T>
     extern std::vector<boost::dynamic_bitset<>> Create_Genetic_Population_V01(std::size_t population_size, std::size_t n_states){
-        std::vector<boost::dynamic_bitset<>> Population = std::vector<boost::dynamic_bitset<>>(population_size);//foo( sizeof( bit_parser )*8*4 ), foo1(sizeof( bit_parser )*8*4 );
+        std::vector<boost::dynamic_bitset<>> Population = std::vector<boost::dynamic_bitset<>>(population_size);
         const u_char prob_step_groups = 5;
         const u_char number_groups = 100/prob_step_groups - 2;//0% and 100% are out of the equation
         const std::size_t structure_size_bits = sizeof( T )*8;
@@ -16,7 +16,7 @@ namespace Genetic {
 
         u_char prob = prob_step_groups;
         Population[0] = boost::dynamic_bitset<>(structure_size_bits*n_states);
-        printf("Flag03");
+
         for (std::size_t i = 1; i < population_size; ) {
             for (std::size_t j = 0; j < group_sizes && i < population_size; ++i, ++j){
                 Population[i] = boost::dynamic_bitset<>(structure_size_bits*n_states);
@@ -731,9 +731,9 @@ namespace Genetic {
         const kernel_type intersection_points = 0.1 * results.total_area;
         for (std::size_t i = 0; i < generations; ++i) {
             printf( "generation %ld\n", i );
-            if ( i < 0.75*generations )
+            if ( i < 0 )//.75*generations )
                 best_index = Generation_Algo_V01(p, genes_population, values, scores, intersection_points );//(20000.0*(i+1))/generations );
-            else if ( i < 0.85*generations )
+            else if ( i < 0 )//.85*generations )
                 best_index = Generation_Algo_V01(p, genes_population, values, scores, 5 * intersection_points );//(40000.0*(i+1))/generations );
             else
                 best_index = Generation_Algo_V01(p, genes_population, values, scores, intersection_weight_max);
@@ -787,9 +787,9 @@ namespace Genetic {
         const kernel_type intersection_points = 0.3 * results.total_area;
         for (std::size_t i = 0; i < generations; ++i) {
             printf( "generation %ld\n", i );
-            if ( i < 0.75*generations )
+            if ( i < 0 )//.75*generations )
                 best_index = Generation_Algo_V01(p, genes_population, values, scores, intersection_points );//(20000.0*(i+1))/generations );
-            else if ( i < 0.85*generations )
+            else if ( i < 0 )//.85*generations )
                 best_index = Generation_Algo_V01(p, genes_population, values, scores, 5*intersection_points );//(40000.0*(i+1))/generations );
             else
                 best_index = Generation_Algo_V01(p, genes_population, values, scores, intersection_weight_max);
@@ -843,9 +843,9 @@ namespace Genetic {
 
         for (std::size_t i = 0; i < generations; ++i) {
             printf( "Generation %ld\n", i );
-            if ( i < 0.75*generations )
+            if ( i < 0 )//.75*generations )
                 best_indexes = Generation_Algo_V02(p, genes_population, values, scores, intersection_points );//(20000.0*(i+1))/generations );
-            else if ( i < 0.85*generations )
+            else if ( i < 0 )//.85*generations )
                 best_indexes = Generation_Algo_V02(p, genes_population, values, scores, 5*intersection_points );//(40000.0*(i+1))/generations);
             else
                 best_indexes = Generation_Algo_V02(p, genes_population, values, scores, std::numeric_limits<float>::max());
@@ -907,9 +907,9 @@ namespace Genetic {
         std::vector<Polygon_2> polygons_aux;
         for (std::size_t i = 0; i < generations; ++i) {
             printf( "Generation %ld\n", i );
-            if ( i < 0.75*generations )
+            if ( i < 0 )//.75*generations )
                 info = Generation_Algo_V03(p, genes_population, values, scores, intersection_points,  best_rect, best_score, true );//(20000.0*(i+1))/generations, best_rect, best_score, true);
-            else if ( i < 0.85*generations )
+            else if ( i < 0 )//.85*generations )
                 info = Generation_Algo_V03(p, genes_population, values, scores, 5*intersection_points, best_rect, best_score, i < 0.8*generations );//(40000.0*(i+1))/generations, best_rect, best_score, i < 0.8*generations);
             else
                 info = Generation_Algo_V03(p, genes_population, values, scores, std::numeric_limits<float>::max(), best_rect, best_score, i < 0.8*generations);
@@ -1073,8 +1073,8 @@ namespace Genetic {
 
             }
             genes_population = selection_V01(genes_population, scores, best_index);
-            //next_generation_Standard<T>(genes_population,version_cross, version_mutation);
-            next_generation_V01<T>(genes_population, version_cross, version_mutation);
+            next_generation_Standard<T>(genes_population,version_cross, version_mutation);
+            //next_generation_V01<T>(genes_population, version_cross, version_mutation);
         }
 
         return results;

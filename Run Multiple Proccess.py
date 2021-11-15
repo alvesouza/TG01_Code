@@ -7,7 +7,7 @@ number_models = 11
 number_algo_versions = 4
 number_cross_version = 4
 number_mutation_versions = 4
-max_process = 50
+max_process = 10
 if __name__ == '__main__':
     #Popen(["gnome-terminal", "--tab", "-e", "python3 -i Teste_FreeCad.py 0 3 1 1"] )
     #Popen(["gnome-terminal", "--tab", "-e", "python3 -i Teste_FreeCad.py 0 3 1 2"] )#, stdout=PIPE, stderr=PIPE, stdin=PIPE)

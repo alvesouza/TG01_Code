@@ -62,32 +62,30 @@ def Rotate2ShorterstHeight( objs ):
 
                 obj.Placement = App.Placement(App.Vector(b[0], b[1], b[2] - lowest_height), r)
 
-def LowestHeightOnZero( objs ):
+def VetexOnZero(objs):
     for obj in objs:
         #print('\n////////////////////////////////////////\nlabel is {0}'.format(q))
+        #Go through objets
         if 'Shape' in dir(obj):
             if str(type(obj)) == "<class 'PartDesign.Body'>" and obj.Label != "Board Body":
+                #Have to make sure that the type, is Body, and can't be Board
                 s = obj.Shape
                 p = obj.Placement
                 b = p.Base
                 r = p.Rotation
-                faces = s.Faces
-                #print(dir(faces[0]))
-                size_list = len(faces)
+
                 best_face = -1
-                lowest_height = 9999999
                 highest_x = -9999999
                 highest_y = -9999999
+                #Go through every vertex to find vertex highest value
                 for vertex in s.Vertexes:
                     Point = vertex.Point
-                    if lowest_height > Point[2]:
-                        lowest_height = Point[2]
                     if highest_x < Point[0]:
                         highest_x = Point[0]
                     if highest_y < Point[1]:
                         highest_y = Point[1]
 
-                obj.Placement = App.Placement(App.Vector( b[0]-highest_x, b[1]-highest_y, b[2] - lowest_height), r)
+                obj.Placement = App.Placement(App.Vector( b[0]-highest_x, b[1]-highest_y, b[2] ), r)
 
 def Initial_Position( objs ):
     for obj in objs:
@@ -155,6 +153,29 @@ def PlaceObjects( objs, values ):
                 obj.Placement = App.Placement(App.Vector(value[ 0 ][ 0 ] + b[0], value[ 0 ][ 1 ] + b[1], b[2]), r)
                 i += 1
 
+def Initial_Position_Board( objs ):
+    for obj in objs:
+        if 'Shape' in dir(obj):
+            if str(type(obj)) == "<class 'PartDesign.Body'>" and obj.Label == "Board Body":
+                s = obj.Shape
+                p = obj.Placement
+                b = p.Base
+                r = p.Rotation
+                lowest_x = 9999999
+                lowest_y = 9999999
+                highest_z = -9999999
+                for vertex in s.Vertexes:
+                    Point = vertex.Point
+                    if lowest_x > Point[0]:
+                        lowest_x = Point[0]
+                    if lowest_y > Point[1]:
+                        lowest_y = Point[1]
+                    if highest_z < Point[2]:
+                        highest_z = Point[2]
+                print(b)
+                print([ b[0]-lowest_x, b[1]-lowest_y, b[2] - highest_z ])
+                obj.Placement = App.Placement(App.Vector( b[0]-lowest_x, b[1]-lowest_y, b[2] - highest_z ), r )
+
 def GetBoard( objs ):
     for obj in objs:
         if obj.Label == "Board":
@@ -197,11 +218,13 @@ if __name__ == '__main__':
     positions_obj = []
     quaternions_obj = []
 
-    #vertex_board = GetBoard( objs )
+    vertex_board = GetBoard( objs )
 
-    #print( vertex_board )
+    print( vertex_board )
 
-    Rotate2ShorterstHeight(objs)
+    #Rotate2ShorterstHeight(objs)
+    #VetexOnZero(objs)
+    Initial_Position_Board( objs )
     #LowestHeightOnZero(objs)
     #values = GetPositionsValues(objs)
 

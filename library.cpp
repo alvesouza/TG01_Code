@@ -109,7 +109,7 @@ boost::python::list GeneticAlgoV01( std::size_t Version, std::size_t Generations
 
 boost::python::list GeneticAlgoV01_parser01( std::size_t Version, std::size_t Generations, std::size_t Population_Size, boost::python::list Positions,boost::python::list Vertexes,
                                              const int version_cross, const int version_mutation ){
-    nice(-19);
+    nice(0);
     return GeneticAlgoV01<Genes_helpers::bit_parser_l1>( Version, Generations, Population_Size, Positions, Vertexes, version_cross, version_mutation );
 }
 Polygon_2 Board_2_Polygon( boost::python::list Vertexes_Board ){
@@ -182,7 +182,7 @@ boost::python::list GeneticAlgo_knolling_V01_parser01( std::size_t Version,
                                                        const int version_cross,
                                                        const int version_mutation
 ){
-    nice(-19);
+    nice(0);
     return GeneticAlgo_knolling_V01<Genes_helpers::bit_parser_l1>( Version,
                                                                     Generations,
                                                                     Population_Size,

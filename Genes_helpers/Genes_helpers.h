@@ -19,8 +19,8 @@ namespace Genes_helpers {
     };
     typedef struct bit_parser_l1 bit_parser_l1;
     struct bit_parser_l1{
-        uint value; //first 14 bits will be x(0-16383, but then limited by 10000 and divided by 10.0f), than the next 14
-        //will be for y, with the same in mind. for the last 4 bits(0-15) then multiplied by 12 will be the angle
+        uint value; //first 13 bits will be x(0-8191, but then limited by 10000 and divided by 10.0f), than the next 13
+        //will be for y, with the same in mind. for the last 6 bits(0-15) then multiplied by 12 will be the angle
     };
     struct State{
         float Position[2];

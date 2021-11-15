@@ -1258,7 +1258,7 @@ def Get_Model_Non_Board(model):
         return Models_00()
 
 def FileName( model, algo_version, cross_version, mutation_version):
-    type = "Variant"
+    type = "Constant"
     try:
         os.mkdir("Data")
     except OSError as e:
@@ -1287,7 +1287,7 @@ def FileName( model, algo_version, cross_version, mutation_version):
     return 'Data/{0}/Algo_{2}/Cross_{3}/Mutation_{4}/Data_model_{1}_algo{2}_cross{3}_mutation{4}.csv'.format( type, model, algo_version, cross_version,
                                                                        mutation_version)
 if __name__ == '__main__':
-    os.nice(-19)
+    os.nice(0)
     print( 'os.environ.get("Cad") = ', os.environ.get("Cad"))
     print( "Teste_FreeCad.py {0} {1} {2} {3}".format(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]) )
     vertex_board = [[0.0, 0.0, 0], [162.987976, 0.0, 0], [208.596848, 45.861645, 0], [283.270172, 52.121681, 0],
@@ -1301,7 +1301,7 @@ if __name__ == '__main__':
 
     values = Get_Model_Non_Board(model)
     # WriteValues(values)
-    new_values = TG01_Code.GeneticAlgoV01_parser01( algo_version, 2000, 50000, values[0], values[1], cross_version, mutation_version )
+    new_values = TG01_Code.GeneticAlgoV01_parser01( algo_version, 2000, 5000, values[0], values[1], cross_version, mutation_version )
     #new_values = TG01_Code.GeneticAlgoV01_parser01( algo_version, 1000, 10000, values[0], values[1], cross_version, mutation_version )
     # new_values = TG01_Code.GeneticAlgoV01_parser01( algo_version, 100, 100, values[0], values[1], cross_version, mutation_version )
     # new_values = TG01_Code.GeneticAlgo_knolling_V01_parser01(1, 100000, 10000, values[0], values[1], [[0, 0, 0]], vertex_board, cross_version, mutation_version)
