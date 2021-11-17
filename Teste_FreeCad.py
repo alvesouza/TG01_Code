@@ -1257,39 +1257,165 @@ def Get_Model_Non_Board(model):
     else:
         return Models_00()
 
-def FileName( model, algo_version, cross_version, mutation_version):
+
+def Board_Model_00():  # square
+    return [[247.900177, 127.14832299999999, 0.0],
+            [[247.900177, 147.695822, 0], [0.0, 147.695822, 0], [0.0, 0.0, 0], [252.12725300000002, 0.0, 0]]]
+
+
+def Board_Model_01():  # Hexagon
+    return [[164.108971, 167.50082349749758, 0.0],
+            [[204.757012, 175.46154449749758, 0], [103.45424205194229, 235.19087899499516, 0],
+             [1.0757360519422718, 177.32477399499516, 0], [0.0, 59.729334497497604, 0], [101.30276994805766, 0.0, 0],
+             [203.68127594805767, 57.86610499999992, 0]]]
+
+
+def Board_Model_03():  # Triangle
+    return [[171.83757, 100.63762572224252, 0.0],
+            [[0.0, 0.8597477222425312, 0], [265.0577784211281, 0.0, 0], [133.27345257887194, 229.976643444485, 0]]]
+
+
+def Board_Model_04():  # Star
+    return [[224.532791, 183.79361, 0.0],
+            [[185.839172, 279.315194, 0], [106.829712, 215.885041, 0], [0.0, 215.885041, 0],
+             [119.07060200000001, 120.18343, 0], [44.51237499999999, 0.0, 0], [179.162372, 63.43014600000001, 0],
+             [262.62309300000004, 1.1128089999999986, 0], [199.1929, 127.973088, 0],
+             [314.92514800000004, 205.869757, 0], [233.690054, 205.869757, 0]]]
+
+
+def Get_Model_Board(model):
+    if model == 0:
+        return [Models_00(), Board_Model_00()]
+    elif model == 1:
+        return [Models_01(), Board_Model_01()]
+    elif model == 2:
+        return [Models_02(), Board_Model_03()]
+    elif model == 3:
+        return [Models_03(), Board_Model_04()]
+    elif model == 4:
+        return [Models_04(), Board_Model_01()]
+    elif model == 5:
+        return [Models_05(), Board_Model_00()]
+    elif model == 6:
+        return [Models_06(), Board_Model_03()]
+    elif model == 7:
+        return [Models_07(), Board_Model_04()]
+    elif model == 8:
+        return [Models_08(), Board_Model_00()]
+    elif model == 9:
+        return [Models_09(), Board_Model_00()]
+    elif model == 10:
+        return [Models_10(), Board_Model_04()]
+    else:
+        return [Models_00(), Board_Model_00]
+
+
+def FileName(model, algo_version, cross_version, mutation_version):
     type = "Constant"
     try:
-        os.mkdir("Data")
+        os.mkdir("Data_knolling")
     except OSError as e:
         print(e)
 
     try:
-        os.mkdir("Data/{0}".format( type ) )
+        os.mkdir("Data_knolling/{0}".format(type))
     except OSError as e:
         print(e)
 
     try:
-        os.mkdir("Data/{0}/Algo_{1}".format( type, algo_version ) )
+        os.mkdir("Data_knolling/{0}/Algo_{1}".format(type, algo_version))
     except OSError as e:
         print(e)
 
     try:
-        os.mkdir("Data/{0}/Algo_{1}/Cross_{2}".format( type, algo_version, cross_version ) )
+        os.mkdir("Data_knolling/{0}/Algo_{1}/Cross_{2}".format(type, algo_version, cross_version))
     except OSError as e:
         print(e)
 
     try:
-        os.mkdir("Data/{0}/Algo_{1}/Cross_{2}/Mutation_{3}".format( type, algo_version, cross_version, mutation_version ) )
+        os.mkdir("Data_knolling/{0}/Algo_{1}/Cross_{2}/Mutation_{3}".format(type, algo_version, cross_version, mutation_version))
     except OSError as e:
         print(e)
 
-    return 'Data/{0}/Algo_{2}/Cross_{3}/Mutation_{4}/Data_model_{1}_algo{2}_cross{3}_mutation{4}.csv'.format( type, model, algo_version, cross_version,
-                                                                       mutation_version)
+    return 'Data_knolling/{0}/Algo_{2}/Cross_{3}/Mutation_{4}/Data_model_{1}_algo{2}_cross{3}_mutation{4}.csv'.format(type,
+                                                                                                             model,
+                                                                                                             algo_version,
+                                                                                                             cross_version,
+                                                                                                             mutation_version)
+
+
+
+# if __name__ == '__no_board__':
+#     os.nice(0)
+#     print('os.environ.get("Cad") = ', os.environ.get("Cad"))
+#     print("Teste_FreeCad.py {0} {1} {2} {3}".format(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]))
+#     vertex_board = [[0.0, 0.0, 0], [162.987976, 0.0, 0], [208.596848, 45.861645, 0], [283.270172, 52.121681, 0],
+#                     [243.027069, 144.233688, 0], [93.68040499999998, 159.436646, 0],
+#                     [29.738585999999998, 102.201996, 0]]
+#
+#     model = int(sys.argv[1])
+#     algo_version = int(sys.argv[2])
+#     cross_version = int(sys.argv[3])
+#     mutation_version = int(sys.argv[4])
+#
+#     values = Get_Model_Non_Board(model)
+#     # WriteValues(values)
+#     new_values = TG01_Code.GeneticAlgoV01_parser01(algo_version, 2000, 5000, values[0], values[1], cross_version,
+#                                                    mutation_version)
+#     # new_values = TG01_Code.GeneticAlgoV01_parser01( algo_version, 1000, 10000, values[0], values[1], cross_version, mutation_version )
+#     # new_values = TG01_Code.GeneticAlgoV01_parser01( algo_version, 100, 100, values[0], values[1], cross_version, mutation_version )
+#     # new_values = TG01_Code.GeneticAlgo_knolling_V01_parser01(1, 100000, 10000, values[0], values[1], [[0, 0, 0]], vertex_board, cross_version, mutation_version)
+#     '''new_values = TG01_Code.GeneticAlgo_knolling_V01_parser01(1, 100, 10, values[0], values[1], [[0, 0, 0]],
+#                                                              vertex_board, cross_version, mutation_version)'''
+#     '''
+#     positions = new_values[0]
+#     areas = new_values[1]
+#     scores = new_values[2]
+#     scores_Fianl = new_values[3]
+#     times = new_values[4]
+#     indexes = new_values[5]
+#     '''
+#     print(new_values)
+#     i = 0
+#     size = len(new_values[4])
+#     positions = new_values[0]
+#     total_area = new_values[1]
+#     board_area = new_values[2]
+#     areas = new_values[3]
+#     scores = new_values[4]
+#     scores_Fianl = new_values[5]
+#     times = new_values[6]
+#     generation = new_values[7]
+#     with open(FileName(model, algo_version, cross_version, mutation_version), 'w', newline='') as csvfile:
+#         fieldnames = ['Generation', 'Time', 'Area', 'Score', 'Score_Final', 'Area_Total', 'Board_Area',
+#                       'Number of Objects', 'Positions']
+#         writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=";")
+#
+#         writer.writeheader()
+#         for i in range(size):
+#             if i == 0:
+#                 writer.writerow({'Generation': generation[i],
+#                                  'Time': times[i],
+#                                  'Area': areas[i],
+#                                  'Score': scores[i],
+#                                  'Score_Final': scores_Fianl[i],
+#                                  'Area_Total': total_area,
+#                                  'Board_Area': board_area,
+#                                  'Number of Objects': len(new_values[0]),
+#                                  'Positions': positions
+#                                  })
+#             else:
+#                 writer.writerow({'Generation': generation[i],
+#                                  'Time': times[i],
+#                                  'Area': areas[i],
+#                                  'Score': scores[i],
+#                                  'Score_Final': scores_Fianl[i]
+#                                  })
+
 if __name__ == '__main__':
     os.nice(0)
-    print( 'os.environ.get("Cad") = ', os.environ.get("Cad"))
-    print( "Teste_FreeCad.py {0} {1} {2} {3}".format(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]) )
+    print('os.environ.get("Cad") = ', os.environ.get("Cad"))
+    print("Teste_FreeCad.py {0} {1} {2} {3}".format(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]))
     vertex_board = [[0.0, 0.0, 0], [162.987976, 0.0, 0], [208.596848, 45.861645, 0], [283.270172, 52.121681, 0],
                     [243.027069, 144.233688, 0], [93.68040499999998, 159.436646, 0],
                     [29.738585999999998, 102.201996, 0]]
@@ -1299,12 +1425,14 @@ if __name__ == '__main__':
     cross_version = int(sys.argv[3])
     mutation_version = int(sys.argv[4])
 
-    values = Get_Model_Non_Board(model)
+    [ values, board_values ] = Get_Model_Board(model)
     # WriteValues(values)
-    new_values = TG01_Code.GeneticAlgoV01_parser01( algo_version, 2000, 5000, values[0], values[1], cross_version, mutation_version )
-    #new_values = TG01_Code.GeneticAlgoV01_parser01( algo_version, 1000, 10000, values[0], values[1], cross_version, mutation_version )
+    #new_values = TG01_Code.GeneticAlgoV01_parser01(algo_version, 2000, 5000, values[0], values[1], cross_version,
+    #                                               mutation_version)
+    # new_values = TG01_Code.GeneticAlgoV01_parser01( algo_version, 1000, 10000, values[0], values[1], cross_version, mutation_version )
     # new_values = TG01_Code.GeneticAlgoV01_parser01( algo_version, 100, 100, values[0], values[1], cross_version, mutation_version )
-    # new_values = TG01_Code.GeneticAlgo_knolling_V01_parser01(1, 100000, 10000, values[0], values[1], [[0, 0, 0]], vertex_board, cross_version, mutation_version)
+    print("ola odifnaofnskmdskcmdlscd")
+    new_values = TG01_Code.GeneticAlgo_knolling_V01_parser01(1, 2000, 5000, values[0], values[1], [board_values[0]], board_values[1], cross_version, mutation_version)
     '''new_values = TG01_Code.GeneticAlgo_knolling_V01_parser01(1, 100, 10, values[0], values[1], [[0, 0, 0]],
                                                              vertex_board, cross_version, mutation_version)'''
     '''
@@ -1326,9 +1454,15 @@ if __name__ == '__main__':
     scores_Fianl = new_values[5]
     times = new_values[6]
     generation = new_values[7]
-    with open(FileName( model, algo_version, cross_version, mutation_version), 'w', newline='') as csvfile:
+    number_vertices = 0
+    number_vertices += len(board_values[1])
+
+    for obj in values[1]:
+        number_vertices += len(obj)
+
+    with open(FileName(model, algo_version, cross_version, mutation_version), 'w', newline='') as csvfile:
         fieldnames = ['Generation', 'Time', 'Area', 'Score', 'Score_Final', 'Area_Total', 'Board_Area',
-                      'Number of Objects', 'Positions']
+                      'Number of Objects', 'Number of Vertices', 'Positions']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=";")
 
         writer.writeheader()
@@ -1342,6 +1476,7 @@ if __name__ == '__main__':
                                  'Area_Total': total_area,
                                  'Board_Area': board_area,
                                  'Number of Objects': len(new_values[0]),
+                                 'Number of Vertices': number_vertices,
                                  'Positions': positions
                                  })
             else:

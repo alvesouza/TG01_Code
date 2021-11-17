@@ -3,7 +3,7 @@ import time
 import os
 from Teste_FreeCad import FileName
 
-number_models = 11
+number_models = 10
 number_algo_versions = 4
 number_cross_version = 4
 number_mutation_versions = 4
@@ -15,7 +15,7 @@ if __name__ == '__main__':
     popen_list = []
     number_of_checks = 0
     for model in range(number_models):#[11]:#range(number_models):
-        for algo in range(number_algo_versions):
+        for algo in [1]:#range(number_algo_versions):
             for cross in range(1, number_cross_version+1):
                 for mutation in range(1, number_mutation_versions+1):
                     while len(popen_list) >= max_process:

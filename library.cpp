@@ -48,7 +48,7 @@ boost::python::list GeneticRetunToPythonList(Genetic::geneticReturn genReturn ){
     list.append(toPythonList<float>(genReturn.scoresFinal));
     list.append(toPythonList<float>(genReturn.time));
     list.append(toPythonList<std::size_t>(genReturn.index));
-
+    printf("finished\n////////////////////////////////////////");
     return list;
 }
 

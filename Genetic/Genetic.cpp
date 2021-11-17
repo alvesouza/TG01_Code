@@ -148,10 +148,11 @@ namespace Genetic {
             poly_aux = Input_State_2_Vec_Polygon(p, values);
 
             score_aux = Score_V02(poly_aux, intersection_weight);
-            if ( change_rect && score_aux.intersection == 0 && best_rect.x_max > score_aux.info.x_max
-                                           && best_rect.y_max > score_aux.info.y_max){// && score_aux.score < best_score) {
+            if(change_rect && best_rect.area > score_aux.info.area && score_aux.intersection == 0 && score_aux.score < best_score){
+            //if ( change_rect && score_aux.intersection == 0 && best_rect.x_max > score_aux.info.x_max
+            //                               && best_rect.y_max > score_aux.info.y_max){// && score_aux.score < best_score) {
                 best_rect = score_aux.info;
-
+                best_score = score_aux.score;
                 //std::cout << "new////////////////////////\nbest_rect.x = " << best_rect.x_max << " best_rect.y = " << best_rect.y_max << " area = " <<best_rect.area << std::endl;
                 //best_score = score_aux.score;
                 //std::cout << "Flag02_05" << std::endl;
@@ -897,10 +898,15 @@ namespace Genetic {
         kernel_type area_aux = CGAL_helpers::Polygons_Area( p );
         results.total_area = area_aux;
         area_aux *= 4;
+//        CGAL_helpers::Rect_info best_rect = {
+//                sqrt(area_aux),
+//                sqrt(area_aux),
+//                area_aux};
+
         CGAL_helpers::Rect_info best_rect = {
-                sqrt(area_aux),
-                sqrt(area_aux),
-                area_aux};
+                1000,
+                1000,
+                1000*1000};
         const kernel_type intersection_points = 0.3 * results.total_area;
         float intersection_weight_max = std::numeric_limits<float>::max();
         std::clock_t start;
@@ -915,6 +921,7 @@ namespace Genetic {
                 info = Generation_Algo_V03(p, genes_population, values, scores, std::numeric_limits<float>::max(), best_rect, best_score, i < 0.8*generations);
 
             //std::cout << genes_population[info.best_indexes[0]] << std::endl;
+            //std::cout << "best_rect.area = " << best_rect.area << " best_rect.y_max = " << best_rect.y_max << " best_rect.x_max = " << best_rect.x_max <<std::endl;
             best_rect = info.rect;
             if( i % 2 == 0 || i == (generations - 1) ) {
                 results.index.push_back(i+1);
@@ -970,9 +977,9 @@ namespace Genetic {
         std::clock_t start;
         std::vector<Polygon_2> polygons_aux;
         for (std::size_t i = 0; i < generations; ++i) {
-            if ( i < 0 )//.2*generations )
+            if ( i < 0.2*generations )
                 info = Generation_Algo_V03(p, genes_population, values, scores, (20000.0*(i+1))/generations, best_rect, best_score, true);
-            else if ( i < 0 )//.75*generations )
+            else if ( i < 0.75*generations )
                 info = Generation_Algo_V03(p, genes_population, values, scores, (40000.0*(i+1))/generations, best_rect, best_score, true);
             else
                 info = Generation_Algo_V03(p, genes_population, values, scores, std::numeric_limits<float>::max(), best_rect, best_score, i < 0.8*generations);
@@ -1073,8 +1080,8 @@ namespace Genetic {
 
             }
             genes_population = selection_V01(genes_population, scores, best_index);
-            next_generation_Standard<T>(genes_population,version_cross, version_mutation);
-            //next_generation_V01<T>(genes_population, version_cross, version_mutation);
+            //next_generation_Standard<T>(genes_population,version_cross, version_mutation);
+            next_generation_V01<T>(genes_population, version_cross, version_mutation);
         }
 
         return results;

@@ -143,7 +143,7 @@ def PlaceObjects( objs, values ):
 
                 value = values[ i ]
 
-                spin = makeRotatingPlacement(App.Vector(b[0], b[1], b[2]), App.Vector(0, 0, 1), value[ 1 ])
+                spin = makeRotatingPlacement(App.Vector(0, 0, 0), App.Vector(0, 0, 1), value[ 1 ])
                 obj.Placement = spin.multiply(obj.Placement)
 
                 p = obj.Placement
@@ -178,11 +178,12 @@ def Initial_Position_Board( objs ):
 
 def GetBoard( objs ):
     for obj in objs:
-        if obj.Label == "Board":
+        if obj.Label == "Board Body":
             vertexes = obj.Shape.Vertexes
             vertexes_list = []
             for vert in vertexes:
-                vertexes_list.append([vert.Point[0], vert.Point[1], 0])
+                if vert.Point[2] == 0:
+                    vertexes_list.append([vert.Point[0], vert.Point[1], 0])
             return vertexes_list
 def WriteValues( values ):
     print( "values = [" )
@@ -218,13 +219,13 @@ if __name__ == '__main__':
     positions_obj = []
     quaternions_obj = []
 
-    vertex_board = GetBoard( objs )
-
-    print( vertex_board )
 
     #Rotate2ShorterstHeight(objs)
     #VetexOnZero(objs)
-    Initial_Position_Board( objs )
+    #Initial_Position_Board( objs )
+    #vertex_board = GetBoard( objs )
+
+    #print( vertex_board )
     #LowestHeightOnZero(objs)
     #values = GetPositionsValues(objs)
 
@@ -232,10 +233,10 @@ if __name__ == '__main__':
     #new_values = TG01_Code.GeneticAlgoV01_parser01( 1, 1000,1000, values[0], values[1] )
     #new_values = TG01_Code.GeneticAlgo_knolling_V01_parser01( 1, 1000, 1000, values[0], values[1], [[0,0,0]], vertex_board, 3, 3)
 
-    
+    new_values = [[[4.400000095367432, 57.599998474121094], 102.0], [[0.20000000298023224, 106.0], 102.0], [[204.8000030517578, 109.0], 102.0], [[115.19999694824219, 109.19999694824219], 102.0], [[212.0, 109.19999694824219], 6.0], [[218.0, 109.19999694824219], 0.0], [[218.39999389648438, 6.800000190734863], 0.0], [[218.39999389648438, 0.4000000059604645], 0.0], [[218.39999389648438, 0.0], 96.0], [[13.600000381469727, 0.0], 6.0], [[0.800000011920929, 102.4000015258789], 96.0], [[0.0, 6.400000095367432], 198.0], [[0.0, 102.80000305175781], 12.0], [[204.8000030517578, 211.1999969482422], 192.0], [[12.800000190734863, 13.199999809265137], 252.0]]
     #scores = new_values[4]
     #scores_Final = new_values[5]
     #print("new positions = ", new_values[0] )
     #print("scores = ", scores  )
     #print("scores_Final = ", scores_Final )
-    #PlaceObjects( objs, new_values[0] )
+    PlaceObjects( objs, new_values )
